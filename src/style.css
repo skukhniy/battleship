@@ -1,3 +1,59 @@
-html {
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
   background-color: navy;
+}
+#battleship_logo {
+  display: block;
+  margin-left: auto;
+  margin-right:auto;
+  position: relative;
+  top: -20px;
+  height: 200px;
+}
+
+#play_button {
+  position: absolute;
+  left:50%;
+  top:50%;
+  margin-left: -185px;
+  margin-top: -85px;
+  height: 150px;
+  width: 350px;
+  background-color: lightgray;
+  border: 10px solid black;
+  cursor: pointer;
+}
+#play_button p {
+  display: block;
+  width:100%;
+  text-align: center;
+  font-size: xxx-large;
+}
+#play_button:hover {
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(3);
+  transform: scale(1.2);
+  
+}
+.nail {
+  position: absolute;
+  display: inline-block;
+  height:15%;
+  width:7%;
+  background-color: darkgray;
+  z-index: 5;
+  border-radius: 50%;
+  margin: 5px;
+}
+#nail_2{
+  left:90%;
+}
+#nail_3{
+  top:78%;
+}
+#nail_4{
+  left:90%;
+  top:78%;
 }
