@@ -2,7 +2,9 @@ html, body {
   height: 100%;
   width: 100%;
   margin: 0;
-  background-color: navy;
+  background-color: rgba(4, 4, 131, 0.644);
+}
+body{
 }
 #battleship_logo {
   display: block;
@@ -56,4 +58,29 @@ html, body {
 #nail_4{
   left:90%;
   top:78%;
+}
+
+#body_container{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#board_container{
+  height: 500px;
+  width:500px;
+  border: 8px solid black;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.grid_block{
+  margin: 0;
+  border:1px solid black;
+  height:48px;
+  width:48px;
+}
+#ship_select_container{
+  height:500px;
+  width:325px;
+  border:4px solid black;
 }
