@@ -92,6 +92,7 @@ body{
   border:4px solid black;
 }
 .ship_1_block{
+margin: 0;
 border:1px solid black;
 height: 48px;
 width:48px;
