@@ -98,6 +98,9 @@ height: 48px;
 width:48px;
 background-color: gray;
 }
+.ship_2_block{
+display: inline-block;
+}
 .dragAbove{
   background-color: gray;
 }

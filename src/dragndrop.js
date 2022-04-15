@@ -38,6 +38,10 @@ document.addEventListener('drop', (e) => {
   if (e.target.classList.contains('dropzone')) {
     console.log(dragged);
     dragged.parentNode.removeChild(dragged);
+    dragged.style.border = 'none';
+    console.log(dragged.childNodes);
+    dragged.childNodes[1].style.border = 'none';
+    dragged.childNodes[3].style.border = 'none';
     e.target.appendChild(dragged);
     e.target.style.background = 'none';
   }
