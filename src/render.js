@@ -3,6 +3,9 @@ function createGridBlocks(container) {
     const blockDiv = document.createElement('div');
     blockDiv.className = 'grid_block';
     blockDiv.id = `grid${String(i)}`;
+    // const openDiv = document.createElement('div');
+    // openDiv.className = 'open_block';
+    // blockDiv.appendChild(openDiv);
     container.appendChild(blockDiv);
   }
 }
