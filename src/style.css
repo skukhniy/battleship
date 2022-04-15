@@ -89,4 +89,8 @@ body{
 border:1px solid black;
 height: 48px;
 width:48px;
+background-color: gray;
+}
+.dragAbove{
+  background-color: gray;
 }

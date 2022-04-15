@@ -6,21 +6,17 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  resolve: {
-    fallback: {
-      util: require.resolve("util/")
-    }
-},
-  module:{
-    rules:[
+  module: {
+    rules: [
       {
         test: /\.(png|jpeg)$/i,
-        type: 'asset/resource'
+        type: 'asset/resource',
       },
       {
         test: /\.css$/i,
-        use: ['style-loader','css-loader']
-      }
-    ]
-  }
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  mode: 'production',
 };
