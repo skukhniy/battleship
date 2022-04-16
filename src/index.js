@@ -1,3 +1,3 @@
 import './style.css';
-import { displayController, dynamicController } from './controller';
-import './dragndrop.js'
+// import { displayController, dynamicController } from './controller';
+import './dragndrop';

@@ -7,9 +7,9 @@ const displayController = (() => {
   };
 })();
 
-function dynamicController(){
+function dynamicController() {
   const gridBlocks = document.querySelectorAll('.grid_block');
-  return([gridBlocks]);
+  return ([gridBlocks]);
 }
 
-export {displayController, dynamicController};
+export { displayController, dynamicController };
