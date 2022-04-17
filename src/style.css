@@ -101,6 +101,12 @@ background-color: gray;
 .ship_2_block{
 display: inline-block;
 }
+.ship_3_block{
+  display: inline-block;
+  }
+.ship_4_block{
+  display:inline-block;
+}
 .dragAbove{
   background-color: gray;
 }
