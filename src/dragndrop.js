@@ -51,8 +51,29 @@ document.addEventListener('dragstart', (e) => {
 document.addEventListener('dragenter', (e) => {
   // console.log('DRAG ENTER');
 });
+
+// // changes the grid to red when a ship is dragged over it
+// document.addEventListener('dragenter', (e) => {
+//   // console.log('DRAG ENTER');
+//   if (e.target.classList.contains('dropzone')) {
+//     e.target.style.background = 'red';
+//     if (checkSize(dragged) > 1) {
+//       activeGrids = [e.target.id];
+//       console.log(checkPosition(dragged, e.target))
+//       checkPosition(dragged, e.target).forEach((elem) => {
+//         console.log(elem);
+//         elem.style.background = 'red';
+//         activeGrids.push(elem.id);
+//       });
+//     }
+//   }
+// });
+
 document.addEventListener('dragover', (e) => {
   e.preventDefault();
+  if (e.target.classList.contains('dropzone')) {
+    e.target.style.background = 'red';
+  }
 });
 
 // removes the background color when the ship leaves this grid area
