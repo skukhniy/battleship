@@ -6,6 +6,7 @@ createGridBlocks(displayController.boardContainer);
 
 let dragged;
 let activeGrids;
+let offset = 0;
 
 function grabGridID(e) {
   let gridID = e.id.replace(/[^0-9]/g, '');
@@ -37,8 +38,17 @@ function isVertical(block) {
   return false;
 }
 
-document.addEventListener('drag', () => {
+const nodes = displayController.ship4block.childNodes;
+console.log(nodes);
+if (nodes[3]) {
+  nodes[3].addEventListener('mouseenter', (e) => {
+    e.target.style.background = 'red';
+    offset = -1;
+  });
+}
 
+document.addEventListener('drag', (e) => {
+  console.log(e.target);
 });
 
 // registers the dragging ship element
