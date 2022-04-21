@@ -110,3 +110,9 @@ display: inline-block;
 .dragAbove{
   background-color: gray;
 }
+.dropped{
+  position: relative;
+  top:-1px;
+  left:-1px;
+
+}
