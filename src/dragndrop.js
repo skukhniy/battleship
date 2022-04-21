@@ -5,12 +5,10 @@ import initOffset from './DOM';
 
 createGridBlocks(displayController.boardContainer);
 createShipSelection(displayController.shipSelectContainer);
-console.log(dynamicController()[1]);
 initOffset(dynamicController()[1]);
 
 let dragged;
 let activeGrids;
-const offset = 0;
 
 function grabGridID(e) {
   let gridID = e.id.replace(/[^0-9]/g, '');
@@ -42,27 +40,48 @@ function isVertical(block) {
   return false;
 }
 
-// console.log(nodes);
-// if (nodes[3]) {
-//   nodes[3].addEventListener('mouseenter', (e) => {
-//     e.target.style.background = 'red';
-//     offset = -1;
-//   });
-// }
-
-// function checkPosition(ship, e) {
-//   // the array which holds the addition grid elements
-//   const elemArray = [];
-//   const shipSize = checkSize(ship);
-//   let offset = 0;
-//   const child = ship.childNodes;
-//   console.log(child);
-//   if (child[0]) child[0].addEventListener('mouseenter', () => (offset = 0));
-//   if (child[1]) child[1].addEventListener('mouseenter', () => (offset = -1));
-//   if (child[2]) child[2].addEventListener('mouseenter', () => (offset = -2));
-//   if (child[3]) child[3].addEventListener('mouseenter', () => (offset = -3));
-//   console.log(offset);
-// }
+function checkPosition(ship, e) {
+  // the array which holds the addition grid elements
+  const elemArray = [];
+  const shipSize = checkSize(ship);
+  let offset = ship.getAttribute('offset');
+  console.log(offset);
+  // init variables for gridID's and the modifier(moving up or to the left etc.)
+  let modifier = 0;
+  let firstGridID = grabGridID(e);
+  let secondGridID = 0;
+  let thirdGridID = 0;
+  let fourthGridID = 0;
+  if (shipSize === 1) {
+    return undefined;
+  }
+  if (isVertical(ship)) {
+    modifier = 10;
+    offset *= 10;
+  } else {
+    modifier = 1;
+  }
+  if (offset < 0) {
+    firstGridID += offset;
+    console.log(firstGridID);
+    const firstGrid = document.getElementById(`grid${String(firstGridID)}`);
+    elemArray.push(firstGrid);
+  }
+  if (shipSize >= 2) {
+    secondGridID = firstGridID + modifier;
+    const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
+    elemArray.push(secondGrid);
+  } if (shipSize >= 3) {
+    thirdGridID = secondGridID + modifier;
+    const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
+    elemArray.push(thirdGrid);
+  } if (shipSize >= 4) {
+    fourthGridID = thirdGridID + modifier;
+    const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
+    elemArray.push(fourthGrid);
+  }
+  return (elemArray);
+}
 
 // function checkPosition(ship, e) {
 //   // the array which holds the addition grid elements
@@ -116,7 +135,10 @@ document.addEventListener('dragenter', (e) => {
   if (e.target.classList.contains('dropzone')) {
     e.target.style.background = 'red';
     if (checkSize(dragged) > 1) {
-      checkPosition(dragged, e);
+      console.log(checkPosition(dragged, e.target));
+      checkPosition(dragged, e.target).forEach((elem) => {
+        elem.style.background = 'red';
+      });
     }
   }
 });
