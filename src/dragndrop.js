@@ -1,12 +1,16 @@
 /* eslint-disable no-param-reassign */
-import { displayController } from './controller';
-import createGridBlocks from './render';
+import { displayController, dynamicController } from './controller';
+import { createGridBlocks, createShipSelection } from './render';
+import initOffset from './DOM';
 
 createGridBlocks(displayController.boardContainer);
+createShipSelection(displayController.shipSelectContainer);
+console.log(dynamicController()[1]);
+initOffset(dynamicController()[1]);
 
 let dragged;
 let activeGrids;
-let offset = 0;
+const offset = 0;
 
 function grabGridID(e) {
   let gridID = e.id.replace(/[^0-9]/g, '');
@@ -38,30 +42,84 @@ function isVertical(block) {
   return false;
 }
 
-const nodes = displayController.ship4block.childNodes;
-console.log(nodes);
-if (nodes[3]) {
-  nodes[3].addEventListener('mouseenter', (e) => {
-    e.target.style.background = 'red';
-    offset = -1;
-  });
-}
+// console.log(nodes);
+// if (nodes[3]) {
+//   nodes[3].addEventListener('mouseenter', (e) => {
+//     e.target.style.background = 'red';
+//     offset = -1;
+//   });
+// }
+
+// function checkPosition(ship, e) {
+//   // the array which holds the addition grid elements
+//   const elemArray = [];
+//   const shipSize = checkSize(ship);
+//   let offset = 0;
+//   const child = ship.childNodes;
+//   console.log(child);
+//   if (child[0]) child[0].addEventListener('mouseenter', () => (offset = 0));
+//   if (child[1]) child[1].addEventListener('mouseenter', () => (offset = -1));
+//   if (child[2]) child[2].addEventListener('mouseenter', () => (offset = -2));
+//   if (child[3]) child[3].addEventListener('mouseenter', () => (offset = -3));
+//   console.log(offset);
+// }
+
+// function checkPosition(ship, e) {
+//   // the array which holds the addition grid elements
+//   const elemArray = [];
+//   const shipSize = checkSize(ship);
+//   // init variables for gridID's and the modifier(moving up or to the left etc.)
+//   let modifier = 0;
+//   let secondGridID = 0;
+//   let thirdGridID = 0;
+//   let fourthGridID = 0;
+//   if (shipSize === 1) {
+//     return undefined;
+//   }
+//   if (isVertical(ship)) {
+//     modifier = 10;
+//   } else {
+//     modifier = 1;
+//   }
+//   if (shipSize >= 2) {
+//     secondGridID = grabGridID(e) + modifier;
+//     const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
+//     elemArray.push(secondGrid);
+//   } if (shipSize >= 3) {
+//     thirdGridID = secondGridID + modifier;
+//     const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
+//     elemArray.push(thirdGrid);
+//   } if (shipSize >= 4) {
+//     fourthGridID = thirdGridID + modifier;
+//     const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
+//     elemArray.push(fourthGrid);
+//   }
+//   return (elemArray);
+// }
 
 document.addEventListener('drag', (e) => {
-  console.log(e.target);
 });
 
 // registers the dragging ship element
 document.addEventListener('dragstart', (e) => {
   dragged = e.target;
-  console.log(dragged);
 });
+
+// // changes the grid to red when a ship is dragged over it
+// document.addEventListener('dragenter', (e) => {
+//   // console.log('DRAG ENTER');
+// });
 
 // changes the grid to red when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
   // console.log('DRAG ENTER');
+  if (e.target.classList.contains('dropzone')) {
+    e.target.style.background = 'red';
+    if (checkSize(dragged) > 1) {
+      checkPosition(dragged, e);
+    }
+  }
 });
-
 // // changes the grid to red when a ship is dragged over it
 // document.addEventListener('dragenter', (e) => {
 //   // console.log('DRAG ENTER');
