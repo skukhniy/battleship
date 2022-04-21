@@ -135,9 +135,12 @@ document.addEventListener('dragenter', (e) => {
   if (e.target.classList.contains('dropzone')) {
     e.target.style.background = 'red';
     if (checkSize(dragged) > 1) {
-      console.log(checkPosition(dragged, e.target));
+      activeGrids = [e.target.id];
+      console.log(checkPosition(dragged, e.target))
       checkPosition(dragged, e.target).forEach((elem) => {
+        console.log(elem);
         elem.style.background = 'red';
+        activeGrids.push(elem.id);
       });
     }
   }
@@ -169,7 +172,36 @@ document.addEventListener('dragover', (e) => {
 // removes the background color when the ship leaves this grid area
 document.addEventListener('dragleave', (e) => {
   // console.log('DRAG LEAVE');
+  if (e.target.classList.contains('dropzone')) {
+    if (!activeGrids.includes(e.target.id)) {
+      e.target.style.background = 'none';
+    }
+    if (checkSize(dragged) > 1) {
+      checkPosition(dragged, e.target).forEach((elem) => {
+        if (!activeGrids.includes(elem.id)) {
+          elem.style.background = 'none';
+        }
+      });
+    }
+  }
 });
+
+// // removes the background color when the ship leaves this grid area
+// document.addEventListener('dragleave', (e) => {
+//   // console.log('DRAG LEAVE');
+//   if (e.target.classList.contains('dropzone')) {
+//     if (!activeGrids.includes(e.target.id)) {
+//       e.target.style.background = 'none';
+//     }
+//     if (checkSize(dragged) > 1) {
+//       checkPosition(dragged, e.target).forEach((elem) => {
+//         if (!activeGrids.includes(elem.id)) {
+//           elem.style.background = 'none';
+//         }
+//       });
+//     }
+//   }
+// });
 
 document.addEventListener('drop', (e) => {
   console.log('DROP');
