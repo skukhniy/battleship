@@ -65,6 +65,10 @@ function checkPosition(ship, e) {
   let secondGridID = 0;
   let thirdGridID = 0;
   let fourthGridID = 0;
+  // console.log(offset);
+  // console.log(shipSize);
+  // console.log(firstGridID);
+  // console.log(ship);
   if (shipSize === 1) {
     return [e];
   }
@@ -74,11 +78,13 @@ function checkPosition(ship, e) {
     offset *= 10;
   } else {
     modifier = 1;
+    offset *= 1;
   }
   // init first Grid based on offset
   if (offset < 0) {
     firstGridID += offset;
     const firstGrid = document.getElementById(`grid${String(firstGridID)}`);
+    console.log(firstGridID);
     elemArray.push(firstGrid);
   }
   if (shipSize >= 2) {

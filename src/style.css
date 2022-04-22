@@ -96,47 +96,63 @@ body{
 margin: 0;
 border:1px solid black;
 height: 48px;
+min-height: 48px;
 width:48px;
+min-width: 48px;
 background-color: gray;
-}
-.ship_1_block{
-  display: inline-block;
-}
-.ship_2_block{
-display: inline-block;
-}
-.ship_3_block{
-  display: inline-block;
-  }
-.ship_4_block{
-  display:inline-block;
-}
-.dragAbove{
-  background-color: gray;
 }
 .dropped{
   position: relative;
   top:-1px;
   left:-1px;
 }
-#oneBlockSelect{
-  margin-top: 5px;
-  margin-bottom: 5px;
+.ship_1_block{
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+}
+.ship_2_block{
+display: flex;
+}
+.ship_3_block{
+  display: flex;
+  }
+.ship_4_block{
+  display:flex;
+}
+.horizontal{
+  flex-direction: row;
+}
+.vertical{
+  flex-direction: column;
+}
+#oneBlockSelect{
+
 }
 #twoBlockSelect{
-
+  height:100px;
+  width:325px;
+}
+#threeBlockSelect{
+  height:150px;
+  width:325px;
+}
+#fourBlockSelect{
+  height: 200px;
+  width: 325px;
+  margin-right: 30px;
 }
 .blockSelect{
   margin-top: 5px;
   margin-bottom: 5px;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
 }
 .blockAmt{
   display: inline-block;
-  
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 30px;
+  margin-right:50px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black; 
 }
+
