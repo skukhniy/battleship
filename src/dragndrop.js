@@ -98,6 +98,36 @@ function checkPosition(ship, e) {
   return (elemArray);
 }
 
+function getBlockedZones(elemArray) {
+  // collect elements for the blocked grids
+  const blockedArray = [];
+  // loop through the grid spaces where the ship is
+  elemArray.forEach((elem) => {
+    const elemID = grabGridID(elem);
+    const offsetModifiers = [-10, 0, 10];
+    // for each modifier, use a for loop to append blocked grids to the blocked array
+    offsetModifiers.forEach((modifier) => {
+      for (let i = -1; i < 2; i++) {
+        let blockedID = elemID + modifier;
+        blockedID += i;
+        const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
+        // checks to make sure the blockedGrid isnt already in the array, or the ship grids
+        if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)) {
+          blockedArray.push(blockedGrid);
+        }
+      }
+    });
+  });
+  return blockedArray;
+}
+
+function blockZones(blockedArray) {
+  blockedArray.forEach((blockedGrid) => {
+    blockedGrid.classList.remove('dropzone');
+    blockedGrid.classList.add('blockedzone');
+  });
+}
+
 document.addEventListener('drag', (e) => {
 });
 
@@ -106,18 +136,18 @@ document.addEventListener('dragstart', (e) => {
   dragged = e.target;
 });
 
-// changes the grid to red when a ship is dragged over it
+// changes the grid to green when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
   // console.log('dragENTER')
   // console.log(e.target);
   activeGrids = [];
   // only change background color for elements in the dropzone
   if (e.target.classList.contains('dropzone')) {
-    e.target.style.background = 'red';
+    e.target.style.background = 'green';
     if (checkSize(dragged) > 1) {
       // init activeGrids array if the ship is longer than 1 block;
       checkPosition(dragged, e.target).forEach((elem) => {
-        elem.style.background = 'red';
+        elem.style.background = 'green';
         activeGrids.push(elem.id);
       });
     }
@@ -160,6 +190,7 @@ document.addEventListener('drop', (e) => {
     dragged.parentNode.removeChild(dragged);
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
+    blockZones(getBlockedZones(grids));
   } else if (e.target.id === 'ship_select_container'
   || e.target.parentNode.id === 'ship_select_container'
   || (e.target.parentNode.getAttribute('ship') && e.target.parentNode.parentNode.id === 'ship_select_container')) {
