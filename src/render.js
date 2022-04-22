@@ -19,6 +19,7 @@ function createShipSelection(container) {
     ship1.id = `1-${String(i)}`;
     ship1.classList = 'ship_1_block';
     ship1.setAttribute('draggable', true);
+    ship1.setAttribute('ship', true);
     container.appendChild(ship1);
   }
   for (let i = 1; i < 4; i++) {
@@ -26,6 +27,7 @@ function createShipSelection(container) {
     ship2.id = `2-${String(i)}`;
     ship2.classList = 'ship_2_block';
     ship2.setAttribute('draggable', true);
+    ship2.setAttribute('ship', true);
     for (let i = 1; i < 3; i++) {
       const ship1blockclone1 = ship1block.cloneNode(true);
       ship2.appendChild(ship1blockclone1);
@@ -37,6 +39,7 @@ function createShipSelection(container) {
     ship3.id = `3-${String(i)}`;
     ship3.classList = 'ship_3_block';
     ship3.setAttribute('draggable', true);
+    ship3.setAttribute('ship', true);
     for (let i = 1; i < 4; i++) {
       const ship1blockclone1 = ship1block.cloneNode(true);
       ship3.appendChild(ship1blockclone1);
@@ -48,6 +51,7 @@ function createShipSelection(container) {
   ship4.id = '4-1';
   ship4.classList = 'ship_4_block';
   ship4.setAttribute('draggable', true);
+  ship4.setAttribute('ship', true);
   for (let i = 1; i < 5; i++) {
     const ship1blockclone1 = ship1block.cloneNode(true);
     ship4.appendChild(ship1blockclone1);

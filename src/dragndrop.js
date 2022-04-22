@@ -7,15 +7,27 @@ createGridBlocks(displayController.boardContainer);
 createShipSelection(displayController.shipSelectContainer);
 initOffset(dynamicController()[1]);
 
+// init variable for ship object, when being dragged
 let dragged;
+// init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
 
+// clear the background for every block in the grid
+function clearGrid(controller) {
+  const children = controller.childNodes;
+  children.forEach((child) => {
+    child.style.background = 'none';
+  });
+}
+
+// grab the html ID from any event element
 function grabGridID(e) {
   let gridID = e.id.replace(/[^0-9]/g, '');
   gridID = parseInt(gridID, 10);
   return (gridID);
 }
 
+// check the length of a ship (blocks 1-4)
 function checkSize(ship) {
   const sizeTotal = ship.offsetHeight + ship.offsetWidth;
   let shipSize = 0;
@@ -33,6 +45,7 @@ function checkSize(ship) {
   return shipSize;
 }
 
+// check if a ship is vertical or horizontal
 function isVertical(block) {
   if (block.offsetHeight > block.offsetWidth) {
     return true;
@@ -40,6 +53,7 @@ function isVertical(block) {
   return false;
 }
 
+// return an array of adjusted grid positions
 function checkPosition(ship, e) {
   // the array which holds the addition grid elements
   const elemArray = [];
@@ -52,17 +66,18 @@ function checkPosition(ship, e) {
   let thirdGridID = 0;
   let fourthGridID = 0;
   if (shipSize === 1) {
-    return undefined;
+    return [e];
   }
+  // for vertical ships, the grid goes up with -10, and down with +10, so the offset must be *10
   if (isVertical(ship)) {
     modifier = 10;
     offset *= 10;
   } else {
     modifier = 1;
   }
+  // init first Grid based on offset
   if (offset < 0) {
     firstGridID += offset;
-    console.log(firstGridID);
     const firstGrid = document.getElementById(`grid${String(firstGridID)}`);
     elemArray.push(firstGrid);
   }
@@ -79,7 +94,7 @@ function checkPosition(ship, e) {
     const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
     elemArray.push(fourthGrid);
   }
-  // returns an array containing the elements for each grid below the ship. 
+  // returns an array containing the elements for each grid below the ship.
   return (elemArray);
 }
 
@@ -91,18 +106,16 @@ document.addEventListener('dragstart', (e) => {
   dragged = e.target;
 });
 
-// // changes the grid to red when a ship is dragged over it
-// document.addEventListener('dragenter', (e) => {
-//   // console.log('DRAG ENTER');
-// });
-
 // changes the grid to red when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
-  // console.log('DRAG ENTER');
+  // console.log('dragENTER')
+  // console.log(e.target);
+  activeGrids = [];
+  // only change background color for elements in the dropzone
   if (e.target.classList.contains('dropzone')) {
     e.target.style.background = 'red';
     if (checkSize(dragged) > 1) {
-      activeGrids = [e.target.id];
+      // init activeGrids array if the ship is longer than 1 block;
       checkPosition(dragged, e.target).forEach((elem) => {
         elem.style.background = 'red';
         activeGrids.push(elem.id);
@@ -117,7 +130,10 @@ document.addEventListener('dragover', (e) => {
 
 // removes the background color when the ship leaves this grid area
 document.addEventListener('dragleave', (e) => {
-  // console.log('DRAG LEAVE');
+  // console.log('dragLEAVE');
+  // console.log(e.target);
+  // console.log('active Grids');
+  // console.log(activeGrids);
   if (e.target.classList.contains('dropzone')) {
     if (!activeGrids.includes(e.target.id)) {
       e.target.style.background = 'none';
@@ -132,35 +148,24 @@ document.addEventListener('dragleave', (e) => {
   }
 });
 
-// // removes the background color when the ship leaves this grid area
-// document.addEventListener('dragleave', (e) => {
-//   // console.log('DRAG LEAVE');
-//   if (e.target.classList.contains('dropzone')) {
-//     if (!activeGrids.includes(e.target.id)) {
-//       e.target.style.background = 'none';
-//     }
-//     if (checkSize(dragged) > 1) {
-//       checkPosition(dragged, e.target).forEach((elem) => {
-//         if (!activeGrids.includes(elem.id)) {
-//           elem.style.background = 'none';
-//         }
-//       });
-//     }
-//   }
-// });
-
 document.addEventListener('drop', (e) => {
   console.log('DROP');
   e.preventDefault();
   if (e.target.classList.contains('dropzone')) {
     const grids = checkPosition(dragged, e.target);
-    grids.forEach((grid)=>{
-      grid.style.background = 'none';
-    });
+    clearGrid(displayController.boardContainer);
+    // grids.forEach((grid)=>{
+    //   grid.style.background = 'none';
+    // });
     dragged.parentNode.removeChild(dragged);
     grids[0].appendChild(dragged);
-    //dragged.style.border = 'none';
     dragged.classList.add('dropped');
+  } else if (e.target.id === 'ship_select_container'
+  || e.target.parentNode.id === 'ship_select_container'
+  || (e.target.parentNode.getAttribute('ship') && e.target.parentNode.parentNode.id === 'ship_select_container')) {
+    dragged.parentNode.removeChild(dragged);
+    displayController.shipSelectContainer.appendChild(dragged);
+    clearGrid(displayController.boardContainer);
   }
 });
 
