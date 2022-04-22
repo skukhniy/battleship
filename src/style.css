@@ -73,6 +73,7 @@ body{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-self: center;
 }
 .grid_block{
   margin: 0;
@@ -87,16 +88,19 @@ body{
   background-color: yellow;
 }
 #ship_select_container{
-  height:500px;
+  height:550px;
   width:325px;
   border:4px solid black;
 }
-.ship_1_block{
+.ship_block{
 margin: 0;
 border:1px solid black;
 height: 48px;
 width:48px;
 background-color: gray;
+}
+.ship_1_block{
+  display: inline-block;
 }
 .ship_2_block{
 display: inline-block;
@@ -114,4 +118,25 @@ display: inline-block;
   position: relative;
   top:-1px;
   left:-1px;
+}
+#oneBlockSelect{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#twoBlockSelect{
+
+}
+.blockSelect{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.blockAmt{
+  display: inline-block;
+  
 }

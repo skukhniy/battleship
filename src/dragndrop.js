@@ -4,7 +4,7 @@ import { createGridBlocks, createShipSelection } from './render';
 import initOffset from './DOM';
 
 createGridBlocks(displayController.boardContainer);
-createShipSelection(displayController.shipSelectContainer);
+// createShipSelection(displayController.shipSelectContainer);
 initOffset(dynamicController()[1]);
 
 // init variable for ship object, when being dragged
