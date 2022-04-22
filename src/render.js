@@ -1,3 +1,5 @@
+import { displayController } from "./controller";
+
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
     const blockDiv = document.createElement('div');
@@ -10,53 +12,47 @@ function createGridBlocks(container) {
   }
 }
 
-function createShipSelection(container) {
-  const ship1block = document.createElement('div');
-  ship1block.classList.add('ship_1_block');
-  // 1 block ships
-  for (let i = 1; i < 5; i++) {
-    const ship1 = document.createElement('div');
-    ship1.id = `1-${String(i)}`;
-    ship1.classList = 'ship_1_block';
-    ship1.setAttribute('draggable', true);
-    ship1.setAttribute('ship', true);
-    container.appendChild(ship1);
-  }
-  for (let i = 1; i < 4; i++) {
-    const ship2 = document.createElement('div');
-    ship2.id = `2-${String(i)}`;
-    ship2.classList = 'ship_2_block';
-    ship2.setAttribute('draggable', true);
-    ship2.setAttribute('ship', true);
-    for (let i = 1; i < 3; i++) {
-      const ship1blockclone1 = ship1block.cloneNode(true);
-      ship2.appendChild(ship1blockclone1);
-    }
-    container.appendChild(ship2);
-  }
-  for (let i = 1; i < 3; i++) {
-    const ship3 = document.createElement('div');
-    ship3.id = `3-${String(i)}`;
-    ship3.classList = 'ship_3_block';
-    ship3.setAttribute('draggable', true);
-    ship3.setAttribute('ship', true);
-    for (let i = 1; i < 4; i++) {
-      const ship1blockclone1 = ship1block.cloneNode(true);
-      ship3.appendChild(ship1blockclone1);
-    }
+function createShip(num, numWritten) {
+  const numString = String(num);
 
-    container.appendChild(ship3);
+  const ship1block = document.createElement('div');
+  ship1block.classList.add('ship_block');
+
+  // create other divs, select/counter etc
+  const blockSelect = document.createElement('div');
+  blockSelect.id = `${numWritten}BlockSelect`;
+  blockSelect.classList = 'blockSelect';
+  const blockAmt = document.createElement('div');
+  blockAmt.id = `${numWritten}BlockAmt`;
+  blockAmt.classList = 'blockAmt';
+  const counter = document.createElement('h2');
+  counter.classList = 'counter';
+  counter.id = `counter${numString}`;
+  counter.innerHTML = `x${numString}`;
+
+  const ship = document.createElement('div');
+  // ship2.id = `2-${String(i)}`;
+  ship.classList = `ship_${numString}_block`;
+  ship.setAttribute('draggable', true);
+  ship.setAttribute('ship', true);
+
+  // create blocks for the ship
+  for (let i = 1; i < num + 1; i++) {
+    const ship1blockclone = ship1block.cloneNode(true);
+    ship.appendChild(ship1blockclone);
   }
-  const ship4 = document.createElement('div');
-  ship4.id = '4-1';
-  ship4.classList = 'ship_4_block';
-  ship4.setAttribute('draggable', true);
-  ship4.setAttribute('ship', true);
-  for (let i = 1; i < 5; i++) {
-    const ship1blockclone1 = ship1block.cloneNode(true);
-    ship4.appendChild(ship1blockclone1);
-  }
-  container.appendChild(ship4);
+  // append elements
+  blockAmt.appendChild(counter);
+  blockSelect.appendChild(blockAmt);
+  blockSelect.append(ship);
+  displayController.shipSelectContainer.appendChild(blockSelect);
+}
+
+function createShipSelection() {
+  createShip(1, 'one');
+  createShip(2, 'two');
+  createShip(3, 'three');
+  createShip(4, 'four');
 }
 
 export { createGridBlocks, createShipSelection };

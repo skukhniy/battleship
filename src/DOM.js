@@ -2,7 +2,8 @@ import { dynamicController } from './controller';
 
 function initOffset(ships) {
   ships.forEach((ship) => {
-    const child = ship.childNodes;
+    const child = ship.children;
+    console.log(child);
     if (child[0]) child[0].addEventListener('mouseenter', () => (ship.setAttribute('offset', 0)));
     if (child[1]) child[1].addEventListener('mouseenter', () => (ship.setAttribute('offset', -1)));
     if (child[2]) child[2].addEventListener('mouseenter', () => (ship.setAttribute('offset', -2)));

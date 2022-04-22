@@ -4,7 +4,7 @@ import { createGridBlocks, createShipSelection } from './render';
 import initOffset from './DOM';
 
 createGridBlocks(displayController.boardContainer);
-// createShipSelection(displayController.shipSelectContainer);
+createShipSelection();
 initOffset(dynamicController()[1]);
 
 // init variable for ship object, when being dragged
@@ -39,9 +39,7 @@ function checkSize(ship) {
     shipSize = 3;
   } else if (sizeTotal === 250) {
     shipSize = 4;
-  } else {
-    alert(`Error Issue with ship size ${shipSize}`);
-  }
+  } else { alert(`Error Issue with ship size ${shipSize}`); }
   return shipSize;
 }
 
@@ -84,7 +82,6 @@ function checkPosition(ship, e) {
   if (offset < 0) {
     firstGridID += offset;
     const firstGrid = document.getElementById(`grid${String(firstGridID)}`);
-    console.log(firstGridID);
     elemArray.push(firstGrid);
   }
   if (shipSize >= 2) {
@@ -104,6 +101,7 @@ function checkPosition(ship, e) {
   return (elemArray);
 }
 
+// get array of blocked grids
 function getBlockedZones(elemArray) {
   // collect elements for the blocked grids
   const blockedArray = [];
@@ -127,6 +125,7 @@ function getBlockedZones(elemArray) {
   return blockedArray;
 }
 
+// apply block to those grids
 function blockZones(blockedArray) {
   blockedArray.forEach((blockedGrid) => {
     blockedGrid.classList.remove('dropzone');
@@ -134,12 +133,31 @@ function blockZones(blockedArray) {
   });
 }
 
+// return current num of dragged ship counter
+function grabCounterNum (ship){
+  const counter = ship.parentNode.children[0].children[0];
+  const counterNum = parseInt(counter.innerHTML.replace('x', ''), 10);
+  return(counterNum);
+}
+
+// add/subtract to the dragged ship counter
+function adjustCounter(ship,modifier){
+  const counter = ship.parentNode.children[0].children[0];
+  const counterNum = grabCounterNum(ship);
+  counter.innerHTML = `x${String(counterNum + modifier)}`;
+}
+
 document.addEventListener('drag', (e) => {
 });
 
 // registers the dragging ship element
 document.addEventListener('dragstart', (e) => {
+  // assign dragging ship to a variable
   dragged = e.target;
+  // adjust counter
+  adjustCounter(dragged, -1);
+  // console.log(counter.innerHTML);
+  // set blocked grids to a light red
   dynamicController()[2].forEach((blockedGrid) => {
     blockedGrid.style.background = 'rgba(222, 7, 7, 0.383)';
   });
@@ -196,17 +214,23 @@ document.addEventListener('drop', (e) => {
     // grids.forEach((grid)=>{
     //   grid.style.background = 'none';
     // });
-    dragged.parentNode.removeChild(dragged);
+    if (grabCounterNum(dragged) === 0) {
+      console.log('counter == 0');
+      dragged.parentNode.removeChild(dragged);
+    }
+    dragged.parentNode.appendChild(dragged);
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
     blockZones(getBlockedZones(grids));
   } else if (e.target.id === 'ship_select_container'
   || e.target.parentNode.id === 'ship_select_container'
   || (e.target.parentNode.getAttribute('ship') && e.target.parentNode.parentNode.id === 'ship_select_container')) {
-    dragged.parentNode.removeChild(dragged);
-    displayController.shipSelectContainer.appendChild(dragged);
+    if (grabCounterNum(dragged) === 0) {
+      dragged.parentNode.appendChild(dragged);
+    }
     clearGrid(displayController.boardContainer);
-  }
+    adjustCounter(dragged, 1);
+  } else {adjustCounter(dragged, 1)};
 });
 
 export default checkSize;
