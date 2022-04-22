@@ -134,6 +134,9 @@ document.addEventListener('drag', (e) => {
 // registers the dragging ship element
 document.addEventListener('dragstart', (e) => {
   dragged = e.target;
+  dynamicController()[2].forEach((blockedGrid) => {
+    blockedGrid.style.background = 'rgba(222, 7, 7, 0.383)';
+  });
 });
 
 // changes the grid to green when a ship is dragged over it

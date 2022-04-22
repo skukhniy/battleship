@@ -13,7 +13,8 @@ const displayController = (() => {
 function dynamicController() {
   const gridBlocks = document.querySelectorAll('.grid_block');
   const ships = document.querySelectorAll('[draggable="true"]');
-  return ([gridBlocks, ships ]);
+  const blockedZones = document.querySelectorAll('.blockedzone');
+  return ([gridBlocks, ships, blockedZones]);
 }
 
 export { displayController, dynamicController };
