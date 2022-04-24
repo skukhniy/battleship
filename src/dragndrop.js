@@ -9,8 +9,10 @@ initOffset(dynamicController()[1]);
 
 // init variable for ship object, when being dragged
 let dragged;
+let clone;
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
+
 
 // clear the background for every block in the grid
 function clearGrid(controller) {
@@ -154,6 +156,8 @@ document.addEventListener('drag', (e) => {
 document.addEventListener('dragstart', (e) => {
   // assign dragging ship to a variable
   dragged = e.target;
+  clone = dragged.cloneNode(true);
+  console.log(dragged);
   // adjust counter
   adjustCounter(dragged, -1);
   // console.log(counter.innerHTML);
@@ -207,18 +211,18 @@ document.addEventListener('dragleave', (e) => {
 
 document.addEventListener('drop', (e) => {
   console.log('DROP');
+  console.log(dragged);
   e.preventDefault();
   if (e.target.classList.contains('dropzone')) {
     const grids = checkPosition(dragged, e.target);
     clearGrid(displayController.boardContainer);
-    // grids.forEach((grid)=>{
-    //   grid.style.background = 'none';
-    // });
     if (grabCounterNum(dragged) === 0) {
       console.log('counter == 0');
-      dragged.parentNode.removeChild(dragged);
+      // dragged.parentNode.removeChild(dragged);
+    } else {
+      dragged.parentNode.appendChild(clone);
+      console.log(dragged.parentNode.children);
     }
-    dragged.parentNode.appendChild(dragged);
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
     blockZones(getBlockedZones(grids));
