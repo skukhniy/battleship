@@ -3,7 +3,6 @@ import { dynamicController } from './controller';
 function initOffset(ships) {
   ships.forEach((ship) => {
     const child = ship.children;
-    console.log(child);
     if (child[0]) child[0].addEventListener('mouseenter', () => (ship.setAttribute('offset', 0)));
     if (child[1]) child[1].addEventListener('mouseenter', () => (ship.setAttribute('offset', -1)));
     if (child[2]) child[2].addEventListener('mouseenter', () => (ship.setAttribute('offset', -2)));
@@ -15,12 +14,14 @@ function flipShip() {
   const ships = dynamicController()[1];
   ships.forEach((ship) => {
     ship.addEventListener('click', () => {
-      if (ship.classList.contains('horizontal')) {
-        ship.classList.remove('horizontal');
-        ship.classList.add('vertical');
-      } else {
-        ship.classList.remove('vertical');
-        ship.classList.add('horizontal');
+      if (!ship.classList.contains('dropped')) {
+        if (ship.classList.contains('horizontal')) {
+          ship.classList.remove('horizontal');
+          ship.classList.add('vertical');
+        } else {
+          ship.classList.remove('vertical');
+          ship.classList.add('horizontal');
+        }
       }
     });
   });
