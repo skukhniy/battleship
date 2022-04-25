@@ -60,22 +60,36 @@ function checkPosition(ship, e) {
   }
   // init first Grid based on offset
   if (shipSize >= 1) {
-    firstGridID += offset;
+    if (offset < 0) {
+      firstGridID += offset;
+    }
     const firstGrid = document.getElementById(`grid${String(firstGridID)}`);
     elemArray.push(firstGrid);
   }
   if (shipSize >= 2) {
-    secondGridID = firstGridID + modifier;
-    const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
-    elemArray.push(secondGrid);
+    if (firstGridID % 10 === 0 && !isVertical(ship)) {
+      elemArray.push(null);
+    } else {
+      secondGridID = firstGridID + modifier;
+      const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
+      elemArray.push(secondGrid);
+    }
   } if (shipSize >= 3) {
-    thirdGridID = secondGridID + modifier;
-    const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
-    elemArray.push(thirdGrid);
+    if (secondGridID % 10 === 0) {
+      elemArray.push(null);
+    } else {
+      thirdGridID = secondGridID + modifier;
+      const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
+      elemArray.push(thirdGrid);
+    }
   } if (shipSize >= 4) {
-    fourthGridID = thirdGridID + modifier;
-    const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
-    elemArray.push(fourthGrid);
+    if (thirdGridID % 10 === 0) {
+      elemArray.push(null);
+    } else {
+      fourthGridID = thirdGridID + modifier;
+      const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
+      elemArray.push(fourthGrid);
+    }
   }
   // returns an array containing the elements for each grid below the ship.
   return (elemArray);
@@ -83,21 +97,34 @@ function checkPosition(ship, e) {
 
 // get array of blocked grids
 function getBlockedZones(elemArray) {
-  // collect elements for the blocked grids
-  const blockedArray = [];
+  const blockedArray = []; // collect elements for the blocked grids
+  let borderLeft = false; // bool to check if a ship grid is on the left or right border
+  let borderRight = false;
   // loop through the grid spaces where the ship is
   elemArray.forEach((elem) => {
     const elemID = grabGridID(elem);
-    const offsetModifiers = [-10, 0, 10];
+    if (((elemID % 10) - 1) === 0) { borderLeft = true; console.log('BL true'); } // check if ship is placed on the border
+    if (elemID % 10 === 0) { borderRight = true; console.log('BR true'); }
+    const offsetModifiers = [-10, 0, 10]; // modifiers go up and down the grids
     // for each modifier, use a for loop to append blocked grids to the blocked array
     offsetModifiers.forEach((modifier) => {
+      // i will range from -1 to 1 and will correspond to the left middle and right
       for (let i = -1; i < 2; i++) {
-        let blockedID = elemID + modifier;
-        blockedID += i;
-        const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
-        // checks to make sure the blockedGrid isnt already in the array, or the ship grids
-        if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)) {
-          blockedArray.push(blockedGrid);
+        console.log(`i = ${i}`);
+        if (!((i == 1) && (borderRight))) {console.log(`check 1 : ${elemID}`);};
+        // makesure that grids outside of the border arent added
+        if (!(((i === 1) && (borderRight)) || ((i === -1) && (borderLeft)))) {
+          console.log(`check 2 : ${elemID}`);
+          let blockedID = elemID + modifier;
+          blockedID += i;
+          const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
+          // checks to make sure the blockedGrid isnt already in the array, or the ship grids
+          // make sure that no grids are added outside of the container (>1 or <100)
+          if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)
+           && blockedID <= 100 && blockedID >= 1) {
+            blockedArray.push(blockedGrid);
+            console.log(`appended grid #${blockedID}`);
+          }
         }
       }
     });
@@ -127,7 +154,22 @@ function adjustCounter(ship, modifier) {
   counter.innerHTML = `x${String(counterNum + modifier)}`;
 }
 
-document.addEventListener('drag', (e) => {
+function blockedZoneCheck(array) {
+  let includesBlocked = false;
+  array.every((elem) => {
+    if (elem === null) {
+      includesBlocked = true;
+      return false;
+    } if (elem.classList.contains('blockedzone')) {
+      includesBlocked = true;
+      return false;
+    }
+    return true;
+  });
+  return includesBlocked;
+}
+
+document.addEventListener('drag', () => {
 });
 
 // registers the dragging ship element
@@ -148,17 +190,25 @@ document.addEventListener('dragstart', (e) => {
 // changes the grid to green when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
   // console.log('dragENTER');
+  // init activeGrids array
   activeGrids = [];
   // only change background color for elements in the dropzone
   if (e.target.classList.contains('dropzone')) {
-    e.target.style.background = 'green';
-    if (dragged.getAttribute('size') > 1) {
-      // init activeGrids array if the ship is longer than 1 block;
-      checkPosition(dragged, e.target).forEach((elem) => {
+    // check to see if the current grids overlap a blockedZone
+    const currentGrids = checkPosition(dragged, e.target);
+    // if theres no overlap with blocked zones, change the grids to green
+    // if there is an overlap, change extra grids to red
+    currentGrids.forEach((elem) => {
+      console.log(elem);
+      if (!blockedZoneCheck(currentGrids)) {
         elem.style.background = 'green';
+      } else if (elem != null) {
+        elem.style.background = 'rgba(222, 7, 7, 0.383)';
+      }
+      if (elem != null) {
         activeGrids.push(elem.id);
-      });
-    }
+      }
+    });
   }
 });
 
@@ -170,13 +220,17 @@ document.addEventListener('dragover', (e) => {
 document.addEventListener('dragleave', (e) => {
   // console.log('dragLEAVE');
   if (e.target.classList.contains('dropzone')) {
-    if (!activeGrids.includes(e.target.id)) {
+    if (!activeGrids.includes(e.target.id) && !e.target.classList.contains('blockedzone')) {
+      console.log('remove target');
       e.target.style.background = 'none';
     }
     if (dragged.getAttribute('size') > 1) {
       checkPosition(dragged, e.target).forEach((elem) => {
-        if (!activeGrids.includes(elem.id)) {
-          elem.style.background = 'none';
+        if (elem != null) {
+          if (!activeGrids.includes(elem.id) && !elem.classList.contains('blockedzone')) {
+            console.log('remove ');
+            elem.style.background = 'none';
+          }
         }
       });
     }
@@ -187,20 +241,21 @@ document.addEventListener('drop', (e) => {
   // console.log('DROP');
   e.preventDefault();
   // execute if elem dropped on the grid board
-  if (e.target.classList.contains('dropzone')) {
-    const grids = checkPosition(dragged, e.target);
-    clearGrid(displayController.boardContainer);
+  const grids = checkPosition(dragged, e.target);
+  clearGrid(displayController.boardContainer);
+  if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
+    // make sure that ship cant be dropped if it overlaps a blocked zone
     // append dropped elem correctly
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
     // lock ship once its placed
     dragged.setAttribute('draggable', false);
-    // add blocked zones
-    blockZones(getBlockedZones(grids));
-    // adjust counter
-    countArray[dragged.getAttribute('size')] -= 1;
-    // rerender ship select
-    deleteShipSelection();
+
+    console.log(getBlockedZones(grids));
+
+    blockZones(getBlockedZones(grids)); // add blocked zones
+    countArray[dragged.getAttribute('size')] -= 1; // adjust counter
+    deleteShipSelection(); // rerender ship select
     createShipSelection(countArray);
   // drop logic if ship dropped into the ship_select_container
   } else if (e.target.id === 'ship_select_container'

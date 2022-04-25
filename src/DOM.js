@@ -1,5 +1,6 @@
 import { dynamicController } from './controller';
 
+// adds offset element so that the specific block will be recorded
 function initOffset(ships) {
   ships.forEach((ship) => {
     const child = ship.children;
@@ -10,10 +11,12 @@ function initOffset(ships) {
   });
 }
 
+// changes class to flip the ship
 function flipShip() {
   const ships = dynamicController()[1];
   ships.forEach((ship) => {
     ship.addEventListener('click', () => {
+      // makes sure that placed ships cant flipx
       if (!ship.classList.contains('dropped')) {
         if (ship.classList.contains('horizontal')) {
           ship.classList.remove('horizontal');
