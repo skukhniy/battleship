@@ -1,17 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
 import { createGridBlocks, createShipSelection } from './render';
-import initOffset from './DOM';
-
-createGridBlocks(displayController.boardContainer);
-createShipSelection();
-initOffset(dynamicController()[1]);
 
 // init variable for ship object, when being dragged
 let dragged;
 let clone;
+// array to hold ship counts
+let countArray = [4, 3, 2, 1];
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
+
+createGridBlocks(displayController.boardContainer);
+createShipSelection();
+
 
 
 // clear the background for every block in the grid
@@ -32,6 +33,7 @@ function grabGridID(e) {
 // check the length of a ship (blocks 1-4)
 function checkSize(ship) {
   const sizeTotal = ship.offsetHeight + ship.offsetWidth;
+  console.log(sizeTotal);
   let shipSize = 0;
   if (sizeTotal === 100) {
     shipSize = 1;
@@ -136,14 +138,14 @@ function blockZones(blockedArray) {
 }
 
 // return current num of dragged ship counter
-function grabCounterNum (ship){
+function grabCounterNum(ship) {
   const counter = ship.parentNode.children[0].children[0];
   const counterNum = parseInt(counter.innerHTML.replace('x', ''), 10);
-  return(counterNum);
+  return (counterNum);
 }
 
 // add/subtract to the dragged ship counter
-function adjustCounter(ship,modifier){
+function adjustCounter(ship, modifier) {
   const counter = ship.parentNode.children[0].children[0];
   const counterNum = grabCounterNum(ship);
   counter.innerHTML = `x${String(counterNum + modifier)}`;
@@ -154,12 +156,14 @@ document.addEventListener('drag', (e) => {
 
 // registers the dragging ship element
 document.addEventListener('dragstart', (e) => {
+  console.log('dragstart');
   // assign dragging ship to a variable
   dragged = e.target;
   clone = dragged.cloneNode(true);
-  console.log(dragged);
-  // adjust counter
-  adjustCounter(dragged, -1);
+  // check if ship is in ship select, then adjust counter
+  if (dragged.parentNode.parentNode === displayController.shipSelectContainer) {
+    adjustCounter(dragged, -1);
+  }
   // console.log(counter.innerHTML);
   // set blocked grids to a light red
   dynamicController()[2].forEach((blockedGrid) => {
@@ -169,7 +173,8 @@ document.addEventListener('dragstart', (e) => {
 
 // changes the grid to green when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
-  // console.log('dragENTER')
+  console.log('dragENTER');
+  console.log(dragged);
   // console.log(e.target);
   activeGrids = [];
   // only change background color for elements in the dropzone
@@ -191,7 +196,7 @@ document.addEventListener('dragover', (e) => {
 
 // removes the background color when the ship leaves this grid area
 document.addEventListener('dragleave', (e) => {
-  // console.log('dragLEAVE');
+  console.log('dragLEAVE');
   // console.log(e.target);
   // console.log('active Grids');
   // console.log(activeGrids);
@@ -213,19 +218,23 @@ document.addEventListener('drop', (e) => {
   console.log('DROP');
   console.log(dragged);
   e.preventDefault();
+  // execute if elem dropped on the grid board
   if (e.target.classList.contains('dropzone')) {
     const grids = checkPosition(dragged, e.target);
     clearGrid(displayController.boardContainer);
+    // check if counter for grabbed ship = 0, if 0 dont repopulate elem
     if (grabCounterNum(dragged) === 0) {
       console.log('counter == 0');
-      // dragged.parentNode.removeChild(dragged);
     } else {
       dragged.parentNode.appendChild(clone);
-      console.log(dragged.parentNode.children);
     }
+    // append dropped elem correctly
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
+    dragged.setAttribute('draggable', false);
+    // add blocked zones
     blockZones(getBlockedZones(grids));
+  // drop logic if ship dropped into the ship_select_container
   } else if (e.target.id === 'ship_select_container'
   || e.target.parentNode.id === 'ship_select_container'
   || (e.target.parentNode.getAttribute('ship') && e.target.parentNode.parentNode.id === 'ship_select_container')) {
@@ -234,7 +243,7 @@ document.addEventListener('drop', (e) => {
     }
     clearGrid(displayController.boardContainer);
     adjustCounter(dragged, 1);
-  } else {adjustCounter(dragged, 1)};
+  } else { adjustCounter(dragged, 1); }
 });
 
 export default checkSize;

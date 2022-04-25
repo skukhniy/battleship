@@ -11,4 +11,18 @@ function initOffset(ships) {
   });
 }
 
-export default initOffset;
+function flipShip() {
+  const ships = dynamicController()[1];
+  ships.forEach((ship) => {
+    ship.addEventListener('click', () => {
+      if (ship.classList.contains('horizontal')) {
+        ship.classList.remove('horizontal');
+        ship.classList.add('vertical');
+      } else {
+        ship.classList.remove('vertical');
+        ship.classList.add('horizontal');
+      }
+    });
+  });
+}
+export { initOffset, flipShip };

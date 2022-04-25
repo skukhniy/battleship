@@ -1,4 +1,5 @@
-import { displayController } from "./controller";
+import { displayController, dynamicController } from "./controller";
+import { flipShip, initOffset } from "./DOM";
 
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
@@ -14,6 +15,7 @@ function createGridBlocks(container) {
 
 function createShip(num, numWritten) {
   const numString = String(num);
+  const counterString = String(5-num);
 
   const ship1block = document.createElement('div');
   ship1block.classList.add('ship_block');
@@ -28,11 +30,11 @@ function createShip(num, numWritten) {
   const counter = document.createElement('h2');
   counter.classList = 'counter';
   counter.id = `counter${numString}`;
-  counter.innerHTML = `x${numString}`;
+  counter.innerHTML = `x${counterString}`;
 
   const ship = document.createElement('div');
   // ship2.id = `2-${String(i)}`;
-  ship.classList = `ship_${numString}_block`;
+  ship.classList.add(`ship_${numString}_block`, 'horizontal');
   ship.setAttribute('draggable', true);
   ship.setAttribute('ship', true);
 
@@ -53,6 +55,9 @@ function createShipSelection() {
   createShip(2, 'two');
   createShip(3, 'three');
   createShip(4, 'four');
+  const shipsSelector = dynamicController()[1];
+  initOffset(shipsSelector);
+  flipShip(shipsSelector);
 }
 
 export { createGridBlocks, createShipSelection };
