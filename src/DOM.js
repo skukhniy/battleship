@@ -1,4 +1,6 @@
-import { dynamicController } from './controller';
+/* eslint-disable no-param-reassign */
+import { displayController, dynamicController } from './controller';
+import { deleteShipSelection, createShipSelection } from './render';
 
 // adds offset element so that the specific block will be recorded
 function initOffset(ships) {
@@ -11,10 +13,26 @@ function initOffset(ships) {
   });
 }
 
+// clear the background for every block in the grid
+function clearGrid(removeShips = false) {
+  const selector = displayController.board;
+  const children = selector.childNodes;
+  children.forEach((childElem) => {
+    childElem.style.background = 'none';
+    if (removeShips) {
+      childElem.classList.remove('blockedzone');
+      childElem.classList.add('dropzone');
+      childElem.innerHTML = '';
+      deleteShipSelection(); // rerender ship select
+      createShipSelection([0, 4, 3, 2, 1]);
+    }
+  });
+}
+
 // changes class to flip the ship
 function flipShip() {
-  const ships = dynamicController()[1];
-  ships.forEach((ship) => {
+  const shipsSelector = dynamicController().ships;
+  shipsSelector.forEach((ship) => {
     ship.addEventListener('click', () => {
       // makes sure that placed ships cant flipx
       if (!ship.classList.contains('dropped')) {
@@ -29,4 +47,13 @@ function flipShip() {
     });
   });
 }
-export { initOffset, flipShip };
+
+function reset(btnSelector) {
+  btnSelector.addEventListener('click', () => {
+    console.log('reset');
+    clearGrid(true);
+  });
+}
+export {
+  initOffset, flipShip, clearGrid, reset,
+};

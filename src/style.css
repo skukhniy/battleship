@@ -5,8 +5,6 @@ html, body {
   background-color: rgba(4, 4, 131, 0.644);
   overflow-x:hidden;
 }
-body{
-}
 #battleship_logo {
   display: block;
   margin-left: auto;
@@ -124,9 +122,6 @@ display: flex;
 .vertical{
   flex-direction: column;
 }
-#oneBlockSelect{
-
-}
 #twoBlockSelect{
   height:100px;
   width:325px;
@@ -155,13 +150,13 @@ display: flex;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black; 
 }
-#boardBtnContainer {
+#board_btn_container {
   margin-top: 7px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
-.boardBtn {
+.board_btn {
   display: inline-block;
   height: 30px;
   width: 80px;
@@ -169,9 +164,16 @@ display: flex;
   border: 1px solid black;
   cursor: pointer;
 }
-.boardBtn p {
+.board_btn p {
   margin: 0;
   margin-top:3px;
   text-align: center;
   font-size: large;
+  user-select: none;
+}
+.board_btn:active {
+  transform: scale(0.98);
+  /* Scaling button to 0.98 to its original size */
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+  /* Lowering the shadow */
 }

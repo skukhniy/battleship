@@ -1,5 +1,5 @@
 import { displayController, dynamicController } from './controller';
-import { flipShip, initOffset } from './DOM';
+import { flipShip, initOffset, reset } from './DOM';
 
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
@@ -11,6 +11,32 @@ function createGridBlocks(container) {
     // blockDiv.appendChild(openDiv);
     container.appendChild(blockDiv);
   }
+}
+
+// creates undo/reset buttons that go under the grid board
+function createBoardBtns() {
+  const btnContainer = document.createElement('div');
+  btnContainer.id = 'board_btn_container';
+
+  const undoBtn = document.createElement('div');
+  undoBtn.id = 'undo_btn';
+  undoBtn.classList = 'board_btn';
+  const undoString = document.createElement('p');
+  undoString.innerHTML = 'Undo';
+  undoBtn.appendChild(undoString);
+  btnContainer.appendChild(undoBtn);
+
+  const resetBtn = document.createElement('div');
+  resetBtn.id = 'reset_btn';
+  resetBtn.classList = 'board_btn';
+  const resetString = document.createElement('p');
+  resetString.innerHTML = 'Reset';
+  resetBtn.appendChild(resetString);
+  reset(resetBtn); // add DOM function
+  btnContainer.appendChild(resetBtn);
+
+  console.log(btnContainer);
+  displayController.boardContainer.appendChild(btnContainer);
 }
 
 function createShip(num, numWritten, count) {
@@ -58,7 +84,7 @@ function createShipSelection(countArray) {
   createShip(2, 'two', countArray[2]);
   createShip(3, 'three', countArray[3]);
   createShip(4, 'four', countArray[4]);
-  const shipsSelector = dynamicController()[1];
+  const shipsSelector = dynamicController().ships;
   initOffset(shipsSelector);
   flipShip(shipsSelector);
 }
@@ -70,4 +96,6 @@ function deleteShipSelection() {
   }
 }
 
-export { createGridBlocks, createShipSelection, deleteShipSelection };
+export {
+  createGridBlocks, createShipSelection, deleteShipSelection, createBoardBtns,
+};

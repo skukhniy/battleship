@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
-import { createGridBlocks, createShipSelection, deleteShipSelection } from './render';
-
+import {
+  createBoardBtns, createGridBlocks, createShipSelection, deleteShipSelection,
+} from './render';
+import { clearGrid } from './DOM';
 // init variable for ship object, when being dragged
 let dragged;
 // array to hold ship counts
@@ -9,16 +11,9 @@ const countArray = [0, 4, 3, 2, 1];
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
 
+createBoardBtns();
 createGridBlocks(displayController.board);
 createShipSelection(countArray);
-
-// clear the background for every block in the grid
-function clearGrid(controller) {
-  const children = controller.childNodes;
-  children.forEach((child) => {
-    child.style.background = 'none';
-  });
-}
 
 // grab the html ID from any event element
 function grabGridID(e) {
@@ -178,7 +173,7 @@ document.addEventListener('dragstart', (e) => {
     adjustCounter(dragged, -1);
   }
   // set blocked grids to a light red
-  dynamicController()[2].forEach((blockedGrid) => {
+  dynamicController().blockedZones.forEach((blockedGrid) => {
     blockedGrid.style.background = 'rgba(222, 7, 7, 0.383)';
   });
 });
@@ -235,7 +230,7 @@ document.addEventListener('drop', (e) => {
   e.preventDefault();
   // execute if elem dropped on the grid board
   const grids = checkPosition(dragged, e.target);
-  clearGrid(displayController.board);
+  clearGrid();
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
     // make sure that ship cant be dropped if it overlaps a blocked zone
     // append dropped elem correctly
@@ -254,7 +249,7 @@ document.addEventListener('drop', (e) => {
     if (grabCounterNum(dragged) === 0) {
       dragged.parentNode.appendChild(dragged);
     }
-    clearGrid(displayController.board);
+    clearGrid();
     adjustCounter(dragged, 1);
   } else { adjustCounter(dragged, 1); }
 });
