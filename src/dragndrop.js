@@ -9,7 +9,7 @@ const countArray = [0, 4, 3, 2, 1];
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
 
-createGridBlocks(displayController.boardContainer);
+createGridBlocks(displayController.board);
 createShipSelection(countArray);
 
 // clear the background for every block in the grid
@@ -75,7 +75,7 @@ function checkPosition(ship, e) {
       elemArray.push(secondGrid);
     }
   } if (shipSize >= 3) {
-    if (secondGridID % 10 === 0) {
+    if (secondGridID % 10 === 0 && !isVertical(ship)) {
       elemArray.push(null);
     } else {
       thirdGridID = secondGridID + modifier;
@@ -83,7 +83,7 @@ function checkPosition(ship, e) {
       elemArray.push(thirdGrid);
     }
   } if (shipSize >= 4) {
-    if (thirdGridID % 10 === 0) {
+    if (thirdGridID % 10 === 0 && !isVertical(ship)) {
       elemArray.push(null);
     } else {
       fourthGridID = thirdGridID + modifier;
@@ -103,18 +103,15 @@ function getBlockedZones(elemArray) {
   // loop through the grid spaces where the ship is
   elemArray.forEach((elem) => {
     const elemID = grabGridID(elem);
-    if (((elemID % 10) - 1) === 0) { borderLeft = true; console.log('BL true'); } // check if ship is placed on the border
-    if (elemID % 10 === 0) { borderRight = true; console.log('BR true'); }
+    if (((elemID % 10) - 1) === 0) { borderLeft = true; } // check if ship is placed on the border
+    if (elemID % 10 === 0) { borderRight = true; }
     const offsetModifiers = [-10, 0, 10]; // modifiers go up and down the grids
     // for each modifier, use a for loop to append blocked grids to the blocked array
     offsetModifiers.forEach((modifier) => {
       // i will range from -1 to 1 and will correspond to the left middle and right
       for (let i = -1; i < 2; i++) {
-        console.log(`i = ${i}`);
-        if (!((i == 1) && (borderRight))) {console.log(`check 1 : ${elemID}`);};
         // makesure that grids outside of the border arent added
         if (!(((i === 1) && (borderRight)) || ((i === -1) && (borderLeft)))) {
-          console.log(`check 2 : ${elemID}`);
           let blockedID = elemID + modifier;
           blockedID += i;
           const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
@@ -123,7 +120,6 @@ function getBlockedZones(elemArray) {
           if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)
            && blockedID <= 100 && blockedID >= 1) {
             blockedArray.push(blockedGrid);
-            console.log(`appended grid #${blockedID}`);
           }
         }
       }
@@ -199,7 +195,6 @@ document.addEventListener('dragenter', (e) => {
     // if theres no overlap with blocked zones, change the grids to green
     // if there is an overlap, change extra grids to red
     currentGrids.forEach((elem) => {
-      console.log(elem);
       if (!blockedZoneCheck(currentGrids)) {
         elem.style.background = 'green';
       } else if (elem != null) {
@@ -221,14 +216,12 @@ document.addEventListener('dragleave', (e) => {
   // console.log('dragLEAVE');
   if (e.target.classList.contains('dropzone')) {
     if (!activeGrids.includes(e.target.id) && !e.target.classList.contains('blockedzone')) {
-      console.log('remove target');
       e.target.style.background = 'none';
     }
     if (dragged.getAttribute('size') > 1) {
       checkPosition(dragged, e.target).forEach((elem) => {
         if (elem != null) {
           if (!activeGrids.includes(elem.id) && !elem.classList.contains('blockedzone')) {
-            console.log('remove ');
             elem.style.background = 'none';
           }
         }
@@ -242,7 +235,7 @@ document.addEventListener('drop', (e) => {
   e.preventDefault();
   // execute if elem dropped on the grid board
   const grids = checkPosition(dragged, e.target);
-  clearGrid(displayController.boardContainer);
+  clearGrid(displayController.board);
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
     // make sure that ship cant be dropped if it overlaps a blocked zone
     // append dropped elem correctly
@@ -250,9 +243,6 @@ document.addEventListener('drop', (e) => {
     dragged.classList.add('dropped');
     // lock ship once its placed
     dragged.setAttribute('draggable', false);
-
-    console.log(getBlockedZones(grids));
-
     blockZones(getBlockedZones(grids)); // add blocked zones
     countArray[dragged.getAttribute('size')] -= 1; // adjust counter
     deleteShipSelection(); // rerender ship select
@@ -264,7 +254,7 @@ document.addEventListener('drop', (e) => {
     if (grabCounterNum(dragged) === 0) {
       dragged.parentNode.appendChild(dragged);
     }
-    clearGrid(displayController.boardContainer);
+    clearGrid(displayController.board);
     adjustCounter(dragged, 1);
   } else { adjustCounter(dragged, 1); }
 });

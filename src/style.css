@@ -66,7 +66,7 @@ body{
   justify-content: space-evenly;
 }
 
-#board_container{
+#board{
   height: 500px;
   width:500px;
   border: 8px solid black;
@@ -155,4 +155,23 @@ display: flex;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black; 
 }
-
+#boardBtnContainer {
+  margin-top: 7px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.boardBtn {
+  display: inline-block;
+  height: 30px;
+  width: 80px;
+  background-color: darkgray;
+  border: 1px solid black;
+  cursor: pointer;
+}
+.boardBtn p {
+  margin: 0;
+  margin-top:3px;
+  text-align: center;
+  font-size: large;
+}

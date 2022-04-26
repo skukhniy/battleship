@@ -1,12 +1,8 @@
 const displayController = (() => {
-  const boardContainer = document.getElementById('board_container');
+  const board = document.getElementById('board');
   const shipSelectContainer = document.getElementById('ship_select_container');
-  const ship1block = document.getElementById('1-1');
-  const ship2block = document.getElementById('2-1');
-  const ship3block = document.getElementById('3-1');
-  const ship4block = document.getElementById('4-1');
   return {
-    boardContainer, shipSelectContainer, ship1block, ship2block, ship3block, ship4block,
+    board, shipSelectContainer,
   };
 })();
 
@@ -14,7 +10,9 @@ function dynamicController() {
   const gridBlocks = document.querySelectorAll('.grid_block');
   const ships = document.querySelectorAll('[draggable="true"]');
   const blockedZones = document.querySelectorAll('.blockedzone');
-  return ([gridBlocks, ships, blockedZones]);
+  const reset = document.getElementById('resetBtn');
+  const undo = document.getElementById('undoBtn');
+  return ([gridBlocks, ships, blockedZones, reset, undo]);
 }
 
 export { displayController, dynamicController };
