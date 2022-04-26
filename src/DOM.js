@@ -50,10 +50,15 @@ function flipShip() {
 
 function reset(btnSelector) {
   btnSelector.addEventListener('click', () => {
-    console.log('reset');
     clearGrid(true);
   });
 }
+
+function undo(btnSelector) {
+  btnSelector.addEventListener('click', () => {
+
+  });
+}
 export {
-  initOffset, flipShip, clearGrid, reset,
+  initOffset, flipShip, clearGrid, reset, undo,
 };

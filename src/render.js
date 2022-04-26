@@ -1,5 +1,5 @@
 import { displayController, dynamicController } from './controller';
-import { flipShip, initOffset, reset } from './DOM';
+import { flipShip, initOffset, reset, undo } from './DOM';
 
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
@@ -24,6 +24,7 @@ function createBoardBtns() {
   const undoString = document.createElement('p');
   undoString.innerHTML = 'Undo';
   undoBtn.appendChild(undoString);
+  undo(undoBtn); // add Dom Func
   btnContainer.appendChild(undoBtn);
 
   const resetBtn = document.createElement('div');
