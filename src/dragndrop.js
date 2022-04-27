@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
 import {
-  deleteShipSelection, clearGrid, createShipSelection,
+  deleteShipSelection, clearGrid, createShipSelection, blockZones, getBlockedZones
 } from './render';
 // init variable for ship object, when being dragged
 let dragged;
@@ -87,47 +87,46 @@ function checkPosition(ship, e) {
   // returns an array containing the elements for each grid below the ship.
   return (elemArray);
 }
-
 // get array of blocked grids
-function getBlockedZones(elemArray) {
-  const blockedArray = []; // collect elements for the blocked grids
-  let borderLeft = false; // bool to check if a ship grid is on the left or right border
-  let borderRight = false;
-  // loop through the grid spaces where the ship is
-  elemArray.forEach((elem) => {
-    const elemID = grabGridID(elem);
-    if (((elemID % 10) - 1) === 0) { borderLeft = true; } // check if ship is placed on the border
-    if (elemID % 10 === 0) { borderRight = true; }
-    const offsetModifiers = [-10, 0, 10]; // modifiers go up and down the grids
-    // for each modifier, use a for loop to append blocked grids to the blocked array
-    offsetModifiers.forEach((modifier) => {
-      // i will range from -1 to 1 and will correspond to the left middle and right
-      for (let i = -1; i < 2; i++) {
-        // makesure that grids outside of the border arent added
-        if (!(((i === 1) && (borderRight)) || ((i === -1) && (borderLeft)))) {
-          let blockedID = elemID + modifier;
-          blockedID += i;
-          const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
-          // checks to make sure the blockedGrid isnt already in the array, or the ship grids
-          // make sure that no grids are added outside of the container (>1 or <100)
-          if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)
-           && blockedID <= 100 && blockedID >= 1) {
-            blockedArray.push(blockedGrid);
-          }
-        }
-      }
-    });
-  });
-  return blockedArray;
-}
+// function getBlockedZones(elemArray) {
+//   const blockedArray = []; // collect elements for the blocked grids
+//   let borderLeft = false; // bool to check if a ship grid is on the left or right border
+//   let borderRight = false;
+//   // loop through the grid spaces where the ship is
+//   elemArray.forEach((elem) => {
+//     const elemID = grabGridID(elem);
+//     if (((elemID % 10) - 1) === 0) { borderLeft = true; } // check if ship is placed on the border
+//     if (elemID % 10 === 0) { borderRight = true; }
+//     const offsetModifiers = [-10, 0, 10]; // modifiers go up and down the grids
+//     // for each modifier, use a for loop to append blocked grids to the blocked array
+//     offsetModifiers.forEach((modifier) => {
+//       // i will range from -1 to 1 and will correspond to the left middle and right
+//       for (let i = -1; i < 2; i++) {
+//         // makesure that grids outside of the border arent added
+//         if (!(((i === 1) && (borderRight)) || ((i === -1) && (borderLeft)))) {
+//           let blockedID = elemID + modifier;
+//           blockedID += i;
+//           const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
+//           // checks to make sure the blockedGrid isnt already in the array, or the ship grids
+//           // make sure that no grids are added outside of the container (>1 or <100)
+//           if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)
+//            && blockedID <= 100 && blockedID >= 1) {
+//             blockedArray.push(blockedGrid);
+//           }
+//         }
+//       }
+//     });
+//   });
+//   return blockedArray;
+// }
 
 // apply block to those grids
-function blockZones(blockedArray) {
-  blockedArray.forEach((blockedGrid) => {
-    blockedGrid.classList.remove('dropzone');
-    blockedGrid.classList.add('blockedzone');
-  });
-}
+// function blockZones(blockedArray) {
+//   blockedArray.forEach((blockedGrid) => {
+//     blockedGrid.classList.remove('dropzone');
+//     blockedGrid.classList.add('blockedzone');
+//   });
+// }
 
 // return current num of dragged ship counter
 function grabCounterNum(ship) {
@@ -241,7 +240,17 @@ document.addEventListener('drop', (e) => {
     historyArray.push([grabGridID(grids[0]), blockedIDs]);
     console.log(historyArray);
     displayController.board.dataset.history = JSON.stringify(historyArray);
+    const gridIDs = [];
+    grids.forEach((grid) => {
+      grid.classList.remove('dropzone');
+      grid.classList.add('shipzone');
+      gridIDs.push(grabGridID(grid));
+    });
+    dragged.setAttribute('data-activeGrids', JSON.stringify(gridIDs));
+
     grids[0].appendChild(dragged);
+
+
 
     dragged.classList.add('dropped');
     // lock ship once its placed
