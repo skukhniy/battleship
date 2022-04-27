@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { displayController, dynamicController } from './controller';
-import { deleteShipSelection, createShipSelection } from './render';
+import { dynamicController } from './controller';
 
 // adds offset element so that the specific block will be recorded
 function initOffset(ships) {
@@ -10,22 +9,6 @@ function initOffset(ships) {
     if (child[1]) child[1].addEventListener('mouseenter', () => (ship.setAttribute('offset', -1)));
     if (child[2]) child[2].addEventListener('mouseenter', () => (ship.setAttribute('offset', -2)));
     if (child[3]) child[3].addEventListener('mouseenter', () => (ship.setAttribute('offset', -3)));
-  });
-}
-
-// clear the background for every block in the grid
-function clearGrid(removeShips = false) {
-  const selector = displayController.board;
-  const children = selector.childNodes;
-  children.forEach((childElem) => {
-    childElem.style.background = 'none';
-    if (removeShips) {
-      childElem.classList.remove('blockedzone');
-      childElem.classList.add('dropzone');
-      childElem.innerHTML = '';
-      deleteShipSelection(); // rerender ship select
-      createShipSelection([0, 4, 3, 2, 1]);
-    }
   });
 }
 
@@ -48,17 +31,6 @@ function flipShip() {
   });
 }
 
-function reset(btnSelector) {
-  btnSelector.addEventListener('click', () => {
-    clearGrid(true);
-  });
-}
-
-function undo(btnSelector) {
-  btnSelector.addEventListener('click', () => {
-
-  });
-}
 export {
-  initOffset, flipShip, clearGrid, reset, undo,
+  initOffset, flipShip,
 };

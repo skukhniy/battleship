@@ -1,19 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
 import {
-  createBoardBtns, createGridBlocks, createShipSelection, deleteShipSelection,
+  deleteShipSelection, clearGrid, createShipSelection,
 } from './render';
-import { clearGrid } from './DOM';
 // init variable for ship object, when being dragged
 let dragged;
 // array to hold ship counts
-const countArray = [0, 4, 3, 2, 1];
+// const countArray = [0, 4, 3, 2, 1];
+displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
+
+const shipPlacementHistory = [1, 2];
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
-
-createBoardBtns();
-createGridBlocks(displayController.board);
-createShipSelection(countArray);
 
 // grab the html ID from any event element
 function grabGridID(e) {
@@ -232,14 +230,20 @@ document.addEventListener('drop', (e) => {
   const grids = checkPosition(dragged, e.target);
   clearGrid();
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
+    const countArray = JSON.parse(displayController.shipSelectContainer.dataset.counter);
+    console.log(countArray);
+    console.log(typeof(countArray));
     // make sure that ship cant be dropped if it overlaps a blocked zone
     // append dropped elem correctly
+    shipPlacementHistory.push(dragged);
     grids[0].appendChild(dragged);
     dragged.classList.add('dropped');
     // lock ship once its placed
     dragged.setAttribute('draggable', false);
     blockZones(getBlockedZones(grids)); // add blocked zones
     countArray[dragged.getAttribute('size')] -= 1; // adjust counter
+    // return updated array to html data attrb
+    displayController.shipSelectContainer.dataset.counter = JSON.stringify(countArray);
     deleteShipSelection(); // rerender ship select
     createShipSelection(countArray);
   // drop logic if ship dropped into the ship_select_container
@@ -253,3 +257,5 @@ document.addEventListener('drop', (e) => {
     adjustCounter(dragged, 1);
   } else { adjustCounter(dragged, 1); }
 });
+
+export default shipPlacementHistory;
