@@ -8,8 +8,8 @@ let dragged;
 // array to hold ship counts
 // const countArray = [0, 4, 3, 2, 1];
 displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
+displayController.board.dataset.history = JSON.stringify([]);
 
-const shipPlacementHistory = [1, 2];
 // init array that hold active Grids, used to avoid overlap conflicts
 let activeGrids;
 
@@ -231,12 +231,18 @@ document.addEventListener('drop', (e) => {
   clearGrid();
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
     const countArray = JSON.parse(displayController.shipSelectContainer.dataset.counter);
-    console.log(countArray);
-    console.log(typeof(countArray));
+    const historyArray = JSON.parse(displayController.board.dataset.history);
     // make sure that ship cant be dropped if it overlaps a blocked zone
     // append dropped elem correctly
-    shipPlacementHistory.push(dragged);
+    const blockedIDs = [];
+    getBlockedZones(grids).forEach((grid) => {
+      blockedIDs.push(grabGridID(grid));
+    });
+    historyArray.push([grabGridID(grids[0]), blockedIDs]);
+    console.log(historyArray);
+    displayController.board.dataset.history = JSON.stringify(historyArray);
     grids[0].appendChild(dragged);
+
     dragged.classList.add('dropped');
     // lock ship once its placed
     dragged.setAttribute('draggable', false);
@@ -257,5 +263,3 @@ document.addEventListener('drop', (e) => {
     adjustCounter(dragged, 1);
   } else { adjustCounter(dragged, 1); }
 });
-
-export default shipPlacementHistory;

@@ -78,12 +78,39 @@ function reset(btnSelector) {
   btnSelector.addEventListener('click', () => {
     clearGrid(true);
     displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
+    displayController.board.dataset.history = JSON.stringify([]);
   });
 }
 
 function undo(btnSelector) {
   btnSelector.addEventListener('click', () => {
-    console.log('');
+    const historyArray = JSON.parse(displayController.board.dataset.history);
+    const countArray = JSON.parse(displayController.shipSelectContainer.dataset.counter);
+    if (historyArray.length > 0) {
+      console.log(historyArray);
+      const lastAction = historyArray.pop();
+      const lastID = lastAction[0];
+      const blockedZones = lastAction[1];
+
+      const gridSelector = document.getElementById(`grid${lastID}`);
+      const shipsSelector = gridSelector.firstChild;
+      const shipSize = shipsSelector.getAttribute('size');
+
+      countArray[shipSize] += 1;
+      console.log(blockedZones);
+      blockedZones.forEach((gridID) => {
+        const selector = document.getElementById(`grid${gridID}`);
+        selector.classList.remove('blockedzone');
+        selector.classList.add('dropzone');
+      });
+
+      deleteShipSelection();
+      createShipSelection(countArray);
+      gridSelector.removeChild(shipsSelector);
+
+      displayController.board.dataset.history = JSON.stringify(historyArray);
+      displayController.shipSelectContainer.dataset.counter = JSON.stringify(countArray);
+    }
   });
 }
 
