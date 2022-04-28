@@ -42,6 +42,7 @@ function createShip(num, numWritten, count) {
   displayController.shipSelectContainer.appendChild(blockSelect);
 }
 
+// creates the ship selection screen & adds DOM logic
 function createShipSelection(countArray) {
   createShip(1, 'one', countArray[1]);
   createShip(2, 'two', countArray[2]);
@@ -52,12 +53,14 @@ function createShipSelection(countArray) {
   flipShip(shipsSelector);
 }
 
+// empties all the children in the ship select screen
 function deleteShipSelection() {
   const parent = displayController.shipSelectContainer;
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
 }
+
 // clear the background for every block in the grid
 function clearGrid(removeShips = false, removeBlockZones = false) {
   const selector = displayController.board;
@@ -76,6 +79,7 @@ function clearGrid(removeShips = false, removeBlockZones = false) {
   });
 }
 
+// remove a ship elem and its shipzone class from the board
 function removeShip(parent, child) {
   const activeGrids = JSON.parse(child.dataset.activegrids);
   activeGrids.forEach((id) => {
@@ -86,11 +90,14 @@ function removeShip(parent, child) {
   parent.removeChild(child);
 }
 
+// grab id and turn it into an INT
 function grabGridID(e) {
   let gridID = e.id.replace(/[^0-9]/g, '');
   gridID = parseInt(gridID, 10);
   return (gridID);
 }
+
+// get array of grids that contain ships
 function getShipZones() {
   const shipZoneArray = [];
   displayController.board.childNodes.forEach((grid) => {
@@ -100,6 +107,8 @@ function getShipZones() {
   });
   return (shipZoneArray);
 }
+
+// return array of elements that will be included in the blocked zone
 function getBlockedZones(elemArray) {
   const blockedArray = []; // collect elements for the blocked grids
   let borderLeft = false; // bool to check if a ship grid is on the left or right border
@@ -132,6 +141,7 @@ function getBlockedZones(elemArray) {
   return blockedArray;
 }
 
+// add blocked class to grids
 function blockZones(blockedArray) {
   blockedArray.forEach((blockedGrid) => {
     blockedGrid.classList.remove('dropzone');
@@ -139,6 +149,7 @@ function blockZones(blockedArray) {
   });
 }
 
+// sets DOM for reset button
 function reset(btnSelector) {
   btnSelector.addEventListener('click', () => {
     clearGrid(true);
@@ -147,27 +158,20 @@ function reset(btnSelector) {
   });
 }
 
+// sets DOM for undo button
 function undo(btnSelector) {
   btnSelector.addEventListener('click', () => {
     const historyArray = JSON.parse(displayController.board.dataset.history);
     const countArray = JSON.parse(displayController.shipSelectContainer.dataset.counter);
     if (historyArray.length > 0) {
       console.log(historyArray);
-      const lastAction = historyArray.pop();
-      const lastID = lastAction[0];
-      const blockedZones = lastAction[1];
+      const lastID = historyArray.pop();
 
       const gridSelector = document.getElementById(`grid${lastID}`);
       const shipsSelector = gridSelector.firstChild;
       const shipSize = shipsSelector.getAttribute('size');
 
       countArray[shipSize] += 1;
-      console.log(blockedZones);
-      // blockedZones.forEach((gridID) => {
-      //   const selector = document.getElementById(`grid${gridID}`);
-      //   selector.classList.remove('blockedzone');
-      //   selector.classList.add('dropzone');
-      // });
 
       deleteShipSelection();
       createShipSelection(countArray);
@@ -178,6 +182,22 @@ function undo(btnSelector) {
 
       displayController.board.dataset.history = JSON.stringify(historyArray);
       displayController.shipSelectContainer.dataset.counter = JSON.stringify(countArray);
+    }
+  });
+}
+
+// setsDOM for play button
+function play(btnSelector) {
+  btnSelector.addEventListener('click', () => {
+    // eslint-disable-next-line prefer-destructuring
+    const counter = displayController.shipSelectContainer.dataset.counter;
+    const counterCheck = JSON.stringify([0, 0, 0, 0, 0]);
+    console.log(counter);
+    console.log(counterCheck);
+    if (counter === counterCheck) {
+      console.log('Play');
+    } else {
+      alert('Please place all ships on the grid board before continuing.');
     }
   });
 }
@@ -217,7 +237,15 @@ function createBoardBtns() {
   reset(resetBtn); // add DOM function
   btnContainer.appendChild(resetBtn);
 
-  console.log(btnContainer);
+  const playBtn = document.createElement('div');
+  playBtn.id = 'play_btn';
+  playBtn.classList = 'board_btn';
+  const playString = document.createElement('p');
+  playString.innerHTML = 'Play';
+  playBtn.appendChild(playString);
+  play(playBtn);
+  btnContainer.appendChild(playBtn);
+
   displayController.boardContainer.appendChild(btnContainer);
 }
 

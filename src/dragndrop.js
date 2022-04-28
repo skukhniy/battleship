@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
 import {
-  deleteShipSelection, clearGrid, createShipSelection, blockZones, getBlockedZones
+  deleteShipSelection, clearGrid, createShipSelection, blockZones, getBlockedZones,
 } from './render';
 // init variable for ship object, when being dragged
 let dragged;
 // array to hold ship counts
-// const countArray = [0, 4, 3, 2, 1];
-displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
+displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 0, 0, 0, 0]);
+// displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
 displayController.board.dataset.history = JSON.stringify([]);
 
 // init array that hold active Grids, used to avoid overlap conflicts
@@ -87,46 +87,6 @@ function checkPosition(ship, e) {
   // returns an array containing the elements for each grid below the ship.
   return (elemArray);
 }
-// get array of blocked grids
-// function getBlockedZones(elemArray) {
-//   const blockedArray = []; // collect elements for the blocked grids
-//   let borderLeft = false; // bool to check if a ship grid is on the left or right border
-//   let borderRight = false;
-//   // loop through the grid spaces where the ship is
-//   elemArray.forEach((elem) => {
-//     const elemID = grabGridID(elem);
-//     if (((elemID % 10) - 1) === 0) { borderLeft = true; } // check if ship is placed on the border
-//     if (elemID % 10 === 0) { borderRight = true; }
-//     const offsetModifiers = [-10, 0, 10]; // modifiers go up and down the grids
-//     // for each modifier, use a for loop to append blocked grids to the blocked array
-//     offsetModifiers.forEach((modifier) => {
-//       // i will range from -1 to 1 and will correspond to the left middle and right
-//       for (let i = -1; i < 2; i++) {
-//         // makesure that grids outside of the border arent added
-//         if (!(((i === 1) && (borderRight)) || ((i === -1) && (borderLeft)))) {
-//           let blockedID = elemID + modifier;
-//           blockedID += i;
-//           const blockedGrid = document.getElementById(`grid${String(blockedID)}`);
-//           // checks to make sure the blockedGrid isnt already in the array, or the ship grids
-//           // make sure that no grids are added outside of the container (>1 or <100)
-//           if (!blockedArray.includes(blockedGrid) && !elemArray.includes(blockedGrid)
-//            && blockedID <= 100 && blockedID >= 1) {
-//             blockedArray.push(blockedGrid);
-//           }
-//         }
-//       }
-//     });
-//   });
-//   return blockedArray;
-// }
-
-// apply block to those grids
-// function blockZones(blockedArray) {
-//   blockedArray.forEach((blockedGrid) => {
-//     blockedGrid.classList.remove('dropzone');
-//     blockedGrid.classList.add('blockedzone');
-//   });
-// }
 
 // return current num of dragged ship counter
 function grabCounterNum(ship) {
@@ -229,17 +189,13 @@ document.addEventListener('drop', (e) => {
   const grids = checkPosition(dragged, e.target);
   clearGrid();
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
+    // grab counter and move history arrays from elem DOM
     const countArray = JSON.parse(displayController.shipSelectContainer.dataset.counter);
     const historyArray = JSON.parse(displayController.board.dataset.history);
-    // make sure that ship cant be dropped if it overlaps a blocked zone
-    // append dropped elem correctly
-    const blockedIDs = [];
-    getBlockedZones(grids).forEach((grid) => {
-      blockedIDs.push(grabGridID(grid));
-    });
-    historyArray.push([grabGridID(grids[0]), blockedIDs]);
-    console.log(historyArray);
+    historyArray.push(grabGridID(grids[0])); // adds this current grid to list of moves
     displayController.board.dataset.history = JSON.stringify(historyArray);
+
+    // grab active Ids and attach to ship DOM
     const gridIDs = [];
     grids.forEach((grid) => {
       grid.classList.remove('dropzone');
@@ -248,19 +204,17 @@ document.addEventListener('drop', (e) => {
     });
     dragged.setAttribute('data-activeGrids', JSON.stringify(gridIDs));
 
-    grids[0].appendChild(dragged);
-
-
-
+    grids[0].appendChild(dragged); // add ship to board
     dragged.classList.add('dropped');
-    // lock ship once its placed
-    dragged.setAttribute('draggable', false);
+    dragged.setAttribute('draggable', false); // lock ship once its placed
     blockZones(getBlockedZones(grids)); // add blocked zones
     countArray[dragged.getAttribute('size')] -= 1; // adjust counter
+
     // return updated array to html data attrb
     displayController.shipSelectContainer.dataset.counter = JSON.stringify(countArray);
     deleteShipSelection(); // rerender ship select
     createShipSelection(countArray);
+
   // drop logic if ship dropped into the ship_select_container
   } else if (e.target.id === 'ship_select_container'
   || e.target.parentNode.id === 'ship_select_container'
