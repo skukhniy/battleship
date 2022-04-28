@@ -21,8 +21,8 @@ function createShip(num, numWritten, count) {
   counter.id = `counter${numString}`;
   counter.innerHTML = `x${counterString}`;
 
+  // create ships
   const ship = document.createElement('div');
-  // ship2.id = `2-${String(i)}`;
   ship.classList.add(`ship_${numString}_block`, 'horizontal');
   if (count > 0) {
     ship.setAttribute('draggable', true);

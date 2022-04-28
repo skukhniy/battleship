@@ -6,8 +6,7 @@ import {
 // init variable for ship object, when being dragged
 let dragged;
 // array to hold ship counts
-displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 0, 0, 0, 0]);
-// displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
+displayController.shipSelectContainer.dataset.counter = JSON.stringify([0, 4, 3, 2, 1]);
 displayController.board.dataset.history = JSON.stringify([]);
 
 // init array that hold active Grids, used to avoid overlap conflicts
@@ -31,12 +30,13 @@ function isVertical(block) {
 // return an array of adjusted grid positions
 function checkPosition(ship, e) {
   // the array which holds the addition grid elements
-  const elemArray = [];
+  let elemArray = [];
   const shipSize = ship.getAttribute('size');
   let offset = ship.getAttribute('offset');
   // init variables for gridID's and the modifier(moving up or to the left etc.)
   let modifier = 0;
-  let firstGridID = grabGridID(e);
+  const currentGridID = grabGridID(e);
+  let firstGridID = currentGridID;
   let secondGridID = 0;
   let thirdGridID = 0;
   let fourthGridID = 0;
@@ -60,27 +60,47 @@ function checkPosition(ship, e) {
     elemArray.push(firstGrid);
   }
   if (shipSize >= 2) {
-    if (firstGridID % 10 === 0 && !isVertical(ship)) {
+    // init the second Grid ID & element
+    secondGridID = firstGridID + modifier;
+    const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
+    // check if ship passes the grid borders
+    if ((firstGridID % 10 === 0 && !isVertical(ship))) {
       elemArray.push(null);
+      // special if statement for the left side of the border
+      // checks to see if the grids to the left of the active grid are smaller (ie on the left)
+      if ((((((secondGridID % 10) - 1) === 0)) && !isVertical(ship)
+      && (firstGridID < currentGridID))) {
+        elemArray = [null];
+        elemArray.push(secondGrid);
+      }
     } else {
-      secondGridID = firstGridID + modifier;
-      const secondGrid = document.getElementById(`grid${String(secondGridID)}`);
-      elemArray.push(secondGrid);
+      elemArray.push(secondGrid); // if the grid doesnt pass any borders, push as is
     }
   } if (shipSize >= 3) {
-    if (secondGridID % 10 === 0 && !isVertical(ship)) {
+    thirdGridID = secondGridID + modifier;
+    const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
+    if (
+      (secondGridID % 10 === 0 && !isVertical(ship)) || elemArray[elemArray.length - 1] === null) {
       elemArray.push(null);
+      if ((((((thirdGridID % 10) - 1) === 0)) && !isVertical(ship)
+      && (secondGridID < currentGridID))) {
+        elemArray = [null];
+        elemArray.push(thirdGrid);
+      }
     } else {
-      thirdGridID = secondGridID + modifier;
-      const thirdGrid = document.getElementById(`grid${String(thirdGridID)}`);
       elemArray.push(thirdGrid);
     }
   } if (shipSize >= 4) {
-    if (thirdGridID % 10 === 0 && !isVertical(ship)) {
+    fourthGridID = thirdGridID + modifier;
+    const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
+    if ((thirdGridID % 10 === 0 && !isVertical(ship)) || elemArray[elemArray.length - 1] === null) {
       elemArray.push(null);
+      if ((((((fourthGridID % 10) - 1) === 0)) && !isVertical(ship)
+      && (thirdGridID < currentGridID))) {
+        elemArray = [null];
+        elemArray.push(fourthGrid);
+      }
     } else {
-      fourthGridID = thirdGridID + modifier;
-      const fourthGrid = document.getElementById(`grid${String(fourthGridID)}`);
       elemArray.push(fourthGrid);
     }
   }
@@ -137,9 +157,7 @@ document.addEventListener('dragstart', (e) => {
 
 // changes the grid to green when a ship is dragged over it
 document.addEventListener('dragenter', (e) => {
-  // console.log('dragENTER');
-  // init activeGrids array
-  activeGrids = [];
+  activeGrids = []; // init activeGrids array
   // only change background color for elements in the dropzone
   if (e.target.classList.contains('dropzone')) {
     // check to see if the current grids overlap a blockedZone
