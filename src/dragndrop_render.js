@@ -186,6 +186,18 @@ function undo(btnSelector) {
   });
 }
 
+function getExportBoard(board) {
+  const exportArray = [];
+  board.childNodes.forEach((grid) => {
+    if (grid.classList.contains('shipzone')) {
+      if (grid.hasChildNodes()) {
+        exportArray.push(grid.firstChild.cloneNode(true));
+      }
+    }
+  });
+  return exportArray;
+}
+
 // setsDOM for play button
 function play(btnSelector) {
   btnSelector.addEventListener('click', () => {
@@ -195,7 +207,7 @@ function play(btnSelector) {
     console.log(counter);
     console.log(counterCheck);
     if (counter === counterCheck) {
-      console.log('Play');
+      getExportBoard(displayController.board);
     } else {
       alert('Please place all ships on the grid board before continuing.');
     }
