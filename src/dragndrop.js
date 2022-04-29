@@ -2,7 +2,7 @@
 import { displayController, dynamicController } from './controller';
 import {
   deleteShipSelection, clearGrid, createShipSelection, blockZones, getBlockedZones,
-} from './render';
+} from './dragndrop_render';
 // init variable for ship object, when being dragged
 let dragged;
 // array to hold ship counts
