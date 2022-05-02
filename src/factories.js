@@ -12,6 +12,7 @@ const ship = (shipObj) => {
     if (hitGrids.length === size) {
       return true;
     }
+    return false;
   };
   return {
     activeGrids, size, hit, isSunk, hitGrids,
