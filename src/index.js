@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './style.css';
 import { displayController } from './controller';
 import './dragndrop';
