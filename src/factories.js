@@ -19,8 +19,16 @@ const ship = (shipObj) => {
   };
 };
 
+const gameboard = () => {
+  // convert gameboard
+  // recieveAttack Func
+  // sees if cordinates hit a ship, if so init ship.hit func
+  // keep track of missed attacks
+  // func to see if all ships have been sunk
+};
+
 export default ship;
-// const gameboard = () => {}
+
 
 // const player = (CPU) => {}
 
