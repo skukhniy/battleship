@@ -3,9 +3,8 @@ const displayController = (() => {
   const board = document.getElementById('board');
   const boardContainer = document.getElementById('board_container');
   const shipSelectContainer = document.getElementById('ship_select_container');
-  const boardBtnContainer = document.getElementById('board_btn_container');
   return {
-    board, shipSelectContainer, boardBtnContainer, boardContainer, bodyContainer,
+    board, shipSelectContainer, boardContainer, bodyContainer,
   };
 })();
 
@@ -16,6 +15,7 @@ function dynamicController() {
     blockedZones: document.querySelectorAll('.blockedzone'),
     reset: document.getElementById('resetBtn'),
     undo: document.getElementById('undoBtn'),
+    boardBtnContainer: document.getElementById('board_btn_container'),
   });
 }
 

@@ -198,6 +198,11 @@ function getExportBoard(board) {
   return exportArray;
 }
 
+function renderGame() {
+  displayController.shipSelectContainer.remove();
+  dynamicController().boardBtnContainer.remove();
+}
+
 // setsDOM for play button
 function play(btnSelector) {
   btnSelector.addEventListener('click', () => {
@@ -207,6 +212,7 @@ function play(btnSelector) {
     if (counter === counterCheck) {
       getExportBoard(displayController.board);
       console.log(getExportBoard(displayController.board));
+      renderGame();
     } else {
       alert('Please place all ships on the grid board before continuing.');
     }
