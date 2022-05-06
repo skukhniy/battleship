@@ -204,16 +204,16 @@ function play(btnSelector) {
     // eslint-disable-next-line prefer-destructuring
     const counter = displayController.shipSelectContainer.dataset.counter;
     const counterCheck = JSON.stringify([0, 0, 0, 0, 0]);
-    console.log(counter);
-    console.log(counterCheck);
     if (counter === counterCheck) {
       getExportBoard(displayController.board);
+      console.log(getExportBoard(displayController.board));
     } else {
       alert('Please place all ships on the grid board before continuing.');
     }
   });
 }
 
+// creates grid blocks for the board
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
     const blockDiv = document.createElement('div');
@@ -261,7 +261,16 @@ function createBoardBtns() {
   displayController.boardContainer.appendChild(btnContainer);
 }
 
+function renderShipSelection() {
+  // displayController.boardContainer.classList.add('active');
+  // displayController.board.classList.add('active');
+  // displayController.shipSelectContainer.classList.add('active');
+  createBoardBtns();
+  createGridBlocks(displayController.board);
+  createShipSelection([0, 4, 3, 2, 1]);
+}
+
 export {
   createGridBlocks, createShipSelection, deleteShipSelection,
-  createBoardBtns, clearGrid, blockZones, getBlockedZones,
+  createBoardBtns, clearGrid, blockZones, getBlockedZones, renderShipSelection,
 };

@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import './style.css';
-import { displayController } from './controller';
 import './dragndrop';
-import { createBoardBtns, createGridBlocks, createShipSelection } from './dragndrop_render';
+import { renderShipSelection } from './dragndrop_render';
 
 // createBoardBtns();
 // createGridBlocks(displayController.board);
