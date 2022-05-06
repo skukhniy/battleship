@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 /* eslint-disable */ 
-import ship from "../factories";
+import {ship, gameboard} from "../factories";
 
 // create ships
 function mockShip(){
@@ -12,9 +12,7 @@ function mockShip(){
   mockShip.setAttribute('data-activeGrids', JSON.stringify([11, 12, 13]));
   return mockShip
 }
-const ship1 = ship(mockShip());
-
-
+let ship1 = ship(mockShip());
 
 it('checkSize', () => {
   expect(ship1.size).toEqual(3);
@@ -39,4 +37,31 @@ it('check hitgrid length', () => {
 
 it('check sink func', () => {
   expect(ship1.isSunk()).toBeTruthy();
+})
+
+// new ship for gameboard factory tests
+let ship2 = ship(mockShip());
+
+// create gameboard
+function mockGameboard(){
+
+}
+const playerGameboard = gameboard();
+playerGameboard.shipArray = [ship2];
+playerGameboard.shipGrids = [ship2.activeGrids];
+
+
+
+it('checking if cordinates will hit a ship', () => {
+  playerGameboard.recieveAttack(12);
+  expect(playerGameboard.shipGrids.includes(12)).toBeTruthy();
+})
+
+it('check if correct ship was found and hit', () => {
+  expect(ship2.hitGrids.includes(13)).toBeTruthy();
+})
+
+it ('check if ship will hold multiple hit cordinates', () => {
+  playerGameboard.recieveAttack(13);
+  expect(ship2.hitGrids).toEqual([12,13]);
 })

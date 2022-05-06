@@ -19,16 +19,38 @@ const ship = (shipObj) => {
   };
 };
 
-const gameboard = () => {
-  // convert gameboard
+const gameboard = (player, board) => {
+  const missedGrids = [];
+  const boardExport = [];
+  // convert player board
+  if (player) {
+    
+  }
+  // create ships
+  const shipArray = [];
+  // need to add history array and then sort
+  const shipGrids = [];
   // recieveAttack Func
-  // sees if cordinates hit a ship, if so init ship.hit func
-  // keep track of missed attacks
+  const recieveAttack = (cordinates) => {
+    // determine if the attack hit a ship
+    if (shipGrids.includes(cordinates)) {
+      shipArray.forEach((shipElem) => {
+        // search for ship w/ active grid
+        if (shipElem.activeGrids.contains(cordinates)) {
+          shipElem.hit(cordinates); // will mark the current ship block as HIT
+        }
+      });
+    } else {
+      missedGrids.push(cordinates);
+    }
+  };
   // func to see if all ships have been sunk
+  return {
+    missedGrids, shipArray, shipGrids, recieveAttack,
+  };
 };
 
-export default ship;
-
+export { ship, gameboard };
 
 // const player = (CPU) => {}
 
