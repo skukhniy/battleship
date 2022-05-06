@@ -213,6 +213,7 @@ function play(btnSelector) {
   });
 }
 
+// creates grid blocks for the board
 function createGridBlocks(container) {
   for (let i = 1; i < 101; i++) {
     const blockDiv = document.createElement('div');
