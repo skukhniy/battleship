@@ -1,3 +1,4 @@
+@font-face { font-family: Binary; src: url('binary.x-chr-brk.ttf'); } ji
 html, body {
   height: 100%;
   width: 100%;
@@ -69,7 +70,7 @@ header{
 
 .board{
   height: 430px;
-  width:430px;
+  width:429.94792px;
   border: 8px solid black;
   display: flex;
   flex-direction: row;
@@ -185,4 +186,19 @@ display: flex;
   margin: 0;
   margin-bottom: 10px;
   text-align: center;
+}
+
+#text_display {
+  height: 125px;
+  width:80%;
+  background-color: darkgray;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 3px solid;
+}
+#text_display h2{
+  text-align: center;
+  padding-top: 30px;
+  color: green;
 }
