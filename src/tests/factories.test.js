@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 /* eslint-disable */ 
-import {ship, gameboard} from "../factories";
+import {ship, gameboard, player} from "../factories";
 
 // create ships
 function mockShip(){
@@ -40,15 +40,9 @@ it('check sink func', () => {
 })
 
 // new ship for gameboard factory tests
-let ship2 = ship(mockShip());
-
-// create gameboard
-function mockGameboard(){
-
-}
-const playerGameboard = gameboard();
-playerGameboard.shipArray = [ship2];
-playerGameboard.shipGrids = [ship2.activeGrids];
+let ship2 = mockShip();
+const ships = [ship2]
+const playerGameboard = gameboard(true, ships);
 
 
 
@@ -58,10 +52,35 @@ it('checking if cordinates will hit a ship', () => {
 })
 
 it('check if correct ship was found and hit', () => {
-  expect(ship2.hitGrids.includes(13)).toBeTruthy();
+  expect(playerGameboard.shipArray[0].hitGrids.includes(12)).toBeTruthy();
 })
 
 it ('check if ship will hold multiple hit cordinates', () => {
   playerGameboard.recieveAttack(13);
-  expect(ship2.hitGrids).toEqual([12,13]);
+  expect(playerGameboard.shipArray[0].hitGrids).toEqual([12,13]);
+})
+
+it('check if missed attack will go to the missed Grid', () => {
+  playerGameboard.recieveAttack(22);
+  expect(playerGameboard.missedGrids).toEqual([22]);
+})
+
+it('check if sunk func works', () => {
+  expect(playerGameboard.isSunk()).toBeFalsy();
+})
+
+it('check if sunk func works with sunken ships', () => {
+  playerGameboard.recieveAttack(11);
+  expect(playerGameboard.isSunk()).toBeTruthy();
+})
+
+const testPlayer = player();
+
+it('check if turn change works for player func', () => {
+  testPlayer.changeTurn();
+  expect(testPlayer.currentTurn).toBeTruthy
+})
+
+it('check if CPU Attack returns an int', () => {
+  expect(testPlayer.cpuAttack(playerGameboard)).toEqual(expect.any(Number));
 })

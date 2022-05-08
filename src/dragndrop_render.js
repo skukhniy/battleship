@@ -186,18 +186,6 @@ function undo(btnSelector) {
   });
 }
 
-function getExportBoard(board) {
-  const exportArray = [];
-  board.childNodes.forEach((grid) => {
-    if (grid.classList.contains('shipzone')) {
-      if (grid.hasChildNodes()) {
-        exportArray.push(grid.firstChild.cloneNode(true));
-      }
-    }
-  });
-  return exportArray;
-}
-
 function renderGame() {
   displayController.shipSelectContainer.remove();
   dynamicController().boardBtnContainer.remove();
@@ -210,8 +198,6 @@ function play(btnSelector) {
     const counter = displayController.shipSelectContainer.dataset.counter;
     const counterCheck = JSON.stringify([0, 0, 0, 0, 0]);
     if (counter === counterCheck) {
-      getExportBoard(displayController.board);
-      console.log(getExportBoard(displayController.board));
       renderGame();
     } else {
       alert('Please place all ships on the grid board before continuing.');
