@@ -68,8 +68,8 @@ header{
 }
 
 .board{
-  height: 500px;
-  width:500px;
+  height: 430px;
+  width:430px;
   border: 8px solid black;
   display: flex;
   flex-direction: row;
@@ -79,12 +79,12 @@ header{
 .grid_block{
   margin: 0;
   border:1px solid black;
-  height:48px;
-  width:48px;
+  height:41px;
+  width:41px;
 }
 .open_block{
-  height:48px;
-  width:48px;
+  height:41px;
+  width:41px;
   margin: 0;
   background-color: yellow;
 }
@@ -96,10 +96,10 @@ header{
 .ship_block{
 margin: 0;
 border:1px solid black;
-height: 48px;
-min-height: 48px;
-width:48px;
-min-width: 48px;
+height: 41px;
+min-height: 41px;
+width:41px;
+min-width: 41px;
 background-color: gray;
 }
 .dropped{
