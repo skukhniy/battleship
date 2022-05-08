@@ -11,7 +11,10 @@ html, body {
   margin-right:auto;
   position: relative;
   top: -20px;
-  height: 200px;
+  height: 175px;
+}
+header{
+  height: 140px;
 }
 
 #play_button {
@@ -64,7 +67,7 @@ html, body {
   justify-content: space-evenly;
 }
 
-#board{
+.board{
   height: 500px;
   width:500px;
   border: 8px solid black;
@@ -176,4 +179,10 @@ display: flex;
   /* Scaling button to 0.98 to its original size */
   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
   /* Lowering the shadow */
+}
+
+.player_title h1{
+  margin: 0;
+  margin-bottom: 10px;
+  text-align: center;
 }
