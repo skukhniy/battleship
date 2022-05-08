@@ -1,4 +1,5 @@
-@font-face { font-family: Binary; src: url('binary.x-chr-brk.ttf'); } ji
+@font-face { font-family: Binary; src: url('binary.x-chr-brk.ttf'); } 
+
 html, body {
   height: 100%;
   width: 100%;
@@ -197,8 +198,10 @@ display: flex;
   margin-right: auto;
   border: 3px solid;
 }
-#text_display h2{
+#text_display h1{
   text-align: center;
-  padding-top: 30px;
+  padding-top: 5px;
   color: green;
+  font-family: Binary;
+  font-size: xxx-large;
 }
