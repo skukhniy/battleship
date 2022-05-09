@@ -1,5 +1,5 @@
 const displayController = (() => {
-  const bodyContainer = document.getElementById('body');
+  const bodyContainer = document.getElementById('body_container');
   const board = document.getElementById('board');
   const boardContainer = document.getElementById('board_container');
   const shipSelectContainer = document.getElementById('ship_select_container');
@@ -16,6 +16,7 @@ function dynamicController() {
     reset: document.getElementById('resetBtn'),
     undo: document.getElementById('undoBtn'),
     boardBtnContainer: document.getElementById('board_btn_container'),
+    cpuBoard: document.getElementById('cpu_board'),
   });
 }
 

@@ -204,7 +204,7 @@ document.addEventListener('drop', (e) => {
   // console.log('DROP');
   e.preventDefault();
   // execute if elem dropped on the grid board
-  const grids = checkPosition(dragged, e.target);
+  const grids = checkPosition(dragged, e.target); // returns an array of ship grids
   clearGrid();
   if (e.target.classList.contains('dropzone') && !blockedZoneCheck(grids)) {
     // grab counter and move history arrays from elem DOM

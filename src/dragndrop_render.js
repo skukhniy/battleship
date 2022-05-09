@@ -2,7 +2,7 @@
 import { displayController, dynamicController } from './controller';
 import { flipShip, initOffset } from './DOM';
 
-function createShip(num, numWritten, count) {
+function createShip(num, numWritten, count, shipSelect) {
   const numString = String(num);
   const counterString = String(count);
 
@@ -24,8 +24,10 @@ function createShip(num, numWritten, count) {
   // create ships
   const ship = document.createElement('div');
   ship.classList.add(`ship_${numString}_block`, 'horizontal');
-  if (count > 0) {
+  if (count > 0 && shipSelect) {
     ship.setAttribute('draggable', true);
+  } else {
+    ship.setAttribute('draggable', false);
   }
   ship.setAttribute('ship', true);
   ship.setAttribute('size', num);
@@ -36,18 +38,21 @@ function createShip(num, numWritten, count) {
     ship.appendChild(ship1blockclone);
   }
   // append elements
-  blockAmt.appendChild(counter);
-  blockSelect.appendChild(blockAmt);
-  blockSelect.append(ship);
-  displayController.shipSelectContainer.appendChild(blockSelect);
+  if (shipSelect) {
+    blockAmt.appendChild(counter);
+    blockSelect.appendChild(blockAmt);
+    blockSelect.append(ship);
+    displayController.shipSelectContainer.appendChild(blockSelect);
+  }
+  return ship;
 }
 
 // creates the ship selection screen & adds DOM logic
 function createShipSelection(countArray) {
-  createShip(1, 'one', countArray[1]);
-  createShip(2, 'two', countArray[2]);
-  createShip(3, 'three', countArray[3]);
-  createShip(4, 'four', countArray[4]);
+  createShip(1, 'one', countArray[1], true);
+  createShip(2, 'two', countArray[2], true);
+  createShip(3, 'three', countArray[3], true);
+  createShip(4, 'four', countArray[4], true);
   const shipsSelector = dynamicController().ships;
   initOffset(shipsSelector);
   flipShip(shipsSelector);
@@ -264,5 +269,5 @@ function renderShipSelection() {
 
 export {
   createGridBlocks, createShipSelection, deleteShipSelection,
-  createBoardBtns, clearGrid, blockZones, getBlockedZones, renderShipSelection,
+  createBoardBtns, clearGrid, blockZones, getBlockedZones, renderShipSelection, createShip,
 };
