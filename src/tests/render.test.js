@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 /* eslint-disable */ 
 import { createShip } from "../dragndrop_render";
-import { randomizeShipCPU, createShipsCPU } from "../render";
+import { randomizeShipCPU, createShipsCPU, passBorder } from "../render";
 
 it('check if ship Array comes through', () => {
   expect(createShipsCPU()).not.toBeNull()
@@ -42,4 +42,11 @@ it('check while loop to see if it will break', () => {
     }
   }
   expect(check).toBeTruthy();
+})
+
+it('testing a ship that passes thru the board', () => {
+  expect(passBorder(18, 4, false)).toBeTruthy();
+})
+it('testing for a ship that stays in bounds', () => {
+  expect(passBorder(47,3)).toBeFalsy();
 })
