@@ -3,8 +3,9 @@ import './style.css';
 import './dragndrop';
 import { renderShipSelection } from './dragndrop_render';
 import './controller';
-import { renderCPUBoard, randomizeShipCPU } from './render';
+import { renderCPUBoard, randomizeShipCPU, mockShipRender } from './render';
 
 // renderShipSelection();
 renderCPUBoard();
-randomizeShipCPU();
+// randomizeShipCPU();
+mockShipRender();

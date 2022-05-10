@@ -177,6 +177,31 @@ function randomizeShipCPU() {
   console.log(shipGrids);
 }
 
+function mockShipRender() {
+  const shipArray = createShipsCPU(); // creates ship Elements
+  const boardGrids = dynamicController().cpuBoard.childNodes; // grabs CPU board grids
+  let startingGrid = 12;
+  for (let i = 0; i < 5; i++) {
+    const ship = shipArray[i];
+    ship.classList.add('dropped');
+    boardGrids[startingGrid].appendChild(ship);
+    startingGrid += 20;
+  }
+  const ship2 = shipArray[5];
+  ship2.classList.remove('horizontal');
+  ship2.classList.add('vertical');
+  boardGrids[40].appendChild(ship2);
+  startingGrid = 7;
+  for (let i = 6; i < 10; i++) {
+    const ship = shipArray[i];
+    ship.classList.remove('horizontal');
+    ship.classList.add('vertical');
+    ship.classList.add('dropped');
+    boardGrids[startingGrid].appendChild(ship);
+    startingGrid += 20;
+  }
+}
+
 export {
-  renderCPUBoard, randomizeShipCPU, createShipsCPU, passBorder,
+  renderCPUBoard, randomizeShipCPU, createShipsCPU, passBorder, mockShipRender,
 };
