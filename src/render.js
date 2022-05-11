@@ -29,6 +29,15 @@ function renderCPUBoard() {
   bodyContainer.appendChild(container);
 }
 
+// hides the ships from the player
+function hideShipsCPU(shipArray) {
+  shipArray.forEach((ship) => {
+    ship.childNodes.forEach((block) => {
+      block.classList.add('hide');
+    });
+  });
+}
+
 // creates array of empty ships
 function createShipsCPU() {
   const shipArray = [];
@@ -45,6 +54,7 @@ function createShipsCPU() {
     const ship = createShip(1, 'one', 4, false);
     shipArray.push(ship);
   }
+  hideShipsCPU(shipArray);
   return shipArray;
 }
 

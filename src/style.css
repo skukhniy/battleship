@@ -105,6 +105,10 @@ width:41px;
 min-width: 41px;
 background-color: gray;
 }
+
+.ship_block.hide{
+  background-color: transparent;
+}
 .dropped{
   position: relative;
   top:-1px;

@@ -30,19 +30,6 @@ function flipShip() {
     });
   });
 }
-// give logic for CPU attacks
-function cpuAttack(board, enemyBoard) {
-  let gridCheck = true;
-  let randomGrid = 0;
-  while (gridCheck) {
-    randomGrid = Math.floor(Math.random() * (100 - 1 + 1) + 1);
-    if (!enemyBoard.missedGrids.includes(randomGrid)
-    && !enemyBoard.attackedGrids.includes(randomGrid)) {
-      gridCheck = false;
-      enemyBoard.recieveAttack(randomGrid);
-    }
-  }
-}
 
 // add logic to mark recieved attacks
 function markAttack(humanBoard, cpuBoard, human, cpu) {
