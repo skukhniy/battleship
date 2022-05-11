@@ -7,8 +7,8 @@ import { renderCPUBoard, randomizeShipCPU, mockShipRender } from './render';
 import { gameboard } from './factories';
 import { game } from './game';
 
-// renderShipSelection();
-renderCPUBoard();
-randomizeShipCPU();
+renderShipSelection();
+// renderCPUBoard();
+// randomizeShipCPU();
 // mockShipRender();
-game();
+// game();
