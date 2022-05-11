@@ -37,15 +37,17 @@ function markAttack(humanBoard, cpuBoard, human, cpu) {
     grid.addEventListener('click', () => {
       let id = grid.id.replace(/[^0-9]/g, '');
       id = parseInt(id, 10);
-      cpuBoard[1].recieveAttack(id);
-      // check if game is over
-      if (cpuBoard[1].isSunk()) {
-        alert('GameOver');
-      }
-      humanBoard[1].recieveAttack(cpu.cpuAttack(humanBoard[1]));
-      // check if game is over
-      if (humanBoard[1].isSunk()) {
-        alert('GameOver');
+      if (!cpuBoard[1].attackedGrids.includes(id)) {
+        cpuBoard[1].recieveAttack(id);
+        // check if game is over
+        if (cpuBoard[1].isSunk()) {
+          alert('GameOver');
+        }
+        humanBoard[1].recieveAttack(cpu.cpuAttack(humanBoard[1]));
+        // check if game is over
+        if (humanBoard[1].isSunk()) {
+          alert('GameOver');
+        }
       }
     });
   });
