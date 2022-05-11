@@ -2,6 +2,8 @@
 import { displayController, dynamicController } from './controller';
 import { createGridBlocks, createShip } from './dragndrop_render';
 
+//
+
 // create CPU game board
 function renderCPUBoard() {
   const container = document.createElement('div');
@@ -17,7 +19,7 @@ function renderCPUBoard() {
   const cpuBoard = document.createElement('div');
   cpuBoard.id = 'cpu_board';
   cpuBoard.classList.add('board');
-  createGridBlocks(cpuBoard);
+  createGridBlocks(cpuBoard, true);
 
   container.appendChild(title);
   container.appendChild(cpuBoard);
@@ -157,6 +159,7 @@ function randomizeShipCPU() {
         if (vertical) { console.log('vertical'); }
         console.log(tempGrids);
         ship.classList.add('dropped');
+        ship.setAttribute('data-activegrids', JSON.stringify(tempGrids));
         boardGrids[randomGrid - 1].appendChild(ship);
       }
       // fail safe incase randomizer cannot find a grid layout

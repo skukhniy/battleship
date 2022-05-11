@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { dynamicController } from './controller';
+import { displayController, dynamicController } from './controller';
 
 // adds offset element so that the specific block will be recorded
 function initOffset(ships) {
@@ -30,7 +30,50 @@ function flipShip() {
     });
   });
 }
+// give logic for CPU attacks
+function cpuAttack(board, enemyBoard) {
+  let gridCheck = true;
+  let randomGrid = 0;
+  while (gridCheck) {
+    randomGrid = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+    if (!enemyBoard.missedGrids.includes(randomGrid)
+    && !enemyBoard.attackedGrids.includes(randomGrid)) {
+      gridCheck = false;
+      enemyBoard.recieveAttack(randomGrid);
+    }
+  }
+}
+
+// add logic to mark recieved attacks
+function markAttack(humanBoard, cpuBoard, human, cpu) {
+  cpuBoard[0].childNodes.forEach((grid) => {
+    grid.addEventListener('click', () => {
+      let id = grid.id.replace(/[^0-9]/g, '');
+      id = parseInt(id, 10);
+      cpuBoard[1].recieveAttack(id);
+      // check if game is over
+      if (cpuBoard[1].isSunk()) {
+        alert('GameOver');
+      }
+      humanBoard[1].recieveAttack(cpu.cpuAttack(humanBoard[1]));
+      // check if game is over
+      if (humanBoard[1].isSunk()) {
+        alert('GameOver');
+      }
+    });
+  });
+}
+
+// mark attacks during game
+function attackDOM(board, cpuBoard, player, cpu) {
+  // disable ships from click
+  Array.from(dynamicController().shipsDropped).forEach((block) => {
+    block.style.pointerEvents = 'none';
+  });
+  markAttack(board, cpuBoard, player, cpu);
+  // markAttack(cpuboard, board);
+}
 
 export {
-  initOffset, flipShip,
+  initOffset, flipShip, attackDOM,
 };

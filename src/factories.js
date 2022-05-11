@@ -31,16 +31,22 @@ const gameboard = (player, board) => {
   const shipGrids = [];
 
   // convert player board
-  if (player) {
-    board.forEach((shipObj) => {
-      const shipElem = ship(shipObj);
-      shipElem.activeGrids.forEach((grid) => { shipGrids.push(grid); });
-      shipArray.push(shipElem);
-    });
-  }
+  board.forEach((shipObj) => {
+    const shipElem = ship(shipObj);
+    shipElem.activeGrids.forEach((grid) => { shipGrids.push(grid); });
+    shipArray.push(shipElem);
+  });
 
   // recieveAttack Func
   const recieveAttack = (cordinates) => {
+    let id = '';
+    if (player) {
+      id = `grid${cordinates}`;
+    } else {
+      id = `gridCpu${cordinates}`;
+    }
+    const gridElem = document.getElementById(id);
+    console.log(shipGrids);
     // determine if the attack hit a ship
     if (shipGrids.includes(cordinates)) {
       shipArray.forEach((shipElem) => {
@@ -48,11 +54,14 @@ const gameboard = (player, board) => {
         if (shipElem.activeGrids.includes(cordinates)) {
           shipElem.hit(cordinates); // will mark the current ship block as HIT
           attackedGrids.push(cordinates);
+          gridElem.innerHTML += "<div class='hit'>&#x2713</div>";
         }
       });
     } else {
       missedGrids.push(cordinates);
       attackedGrids.push(cordinates);
+      gridElem.innerHTML += "<div class='missed'>&#10060</div>";
+      // gridElem.classList.add('missed');
     }
   };
   // func to see if all ships have been sunk
@@ -66,28 +75,30 @@ const gameboard = (player, board) => {
     return bool;
   });
   return {
-    missedGrids, shipArray, shipGrids, recieveAttack, isSunk, attackedGrids,
+    missedGrids, shipArray, shipGrids, recieveAttack, isSunk, attackedGrids, 
   };
 };
 
 // player factory, tracks turn change and allows CPU to generate Attack
-const player = () => {
-  let currentTurn = false;
-  const changeTurn = (bool) => {
-    currentTurn = bool;
+const player = (cpu) => {
+  let currentTurn = true;
+  if (cpu) { currentTurn = false; }
+  const changeTurn = () => {
+    if (currentTurn) { currentTurn = false; } else currentTurn = true;
   };
   const cpuAttack = (board) => {
-    function randomInt() { return (Math.random() * (100 - 1) + 1); }
+    function randomInt() { return Math.floor(Math.random() * (100 - 1) + 1); }
     let attackCordinates = randomInt();
     while (board.attackedGrids.includes(attackCordinates)) {
       attackCordinates = randomInt();
     }
+    console.log(attackCordinates);
     return attackCordinates;
   };
+  const getTurn = () => currentTurn;
   return {
-    changeTurn, cpuAttack, currentTurn,
+    changeTurn, cpuAttack, currentTurn, getTurn,
   };
 };
 
 export { ship, gameboard, player };
-

@@ -244,3 +244,5 @@ document.addEventListener('drop', (e) => {
     adjustCounter(dragged, 1);
   } else { adjustCounter(dragged, 1); }
 });
+
+export default grabGridID;

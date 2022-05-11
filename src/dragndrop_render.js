@@ -211,11 +211,15 @@ function play(btnSelector) {
 }
 
 // creates grid blocks for the board
-function createGridBlocks(container) {
+function createGridBlocks(container, cpu = false) {
   for (let i = 1; i < 101; i++) {
     const blockDiv = document.createElement('div');
     blockDiv.classList.add('grid_block', 'dropzone');
-    blockDiv.id = `grid${String(i)}`;
+    if (!cpu) {
+      blockDiv.id = `grid${String(i)}`;
+    } else {
+      blockDiv.id = `gridCpu${i}`;
+    }
     // const openDiv = document.createElement('div');
     // openDiv.className = 'open_block';
     // blockDiv.appendChild(openDiv);

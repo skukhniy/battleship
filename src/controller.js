@@ -17,6 +17,8 @@ function dynamicController() {
     undo: document.getElementById('undoBtn'),
     boardBtnContainer: document.getElementById('board_btn_container'),
     cpuBoard: document.getElementById('cpu_board'),
+    shipBlocks: document.getElementsByClassName('ship_block'),
+    shipsDropped: document.querySelectorAll("[ship='true']"),
   });
 }
 
