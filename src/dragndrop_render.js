@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
+// eslint-disable-next-line import/no-cycle
 import { flipShip, initOffset } from './DOM';
+import { renderGame } from './render';
 
 function createShip(num, numWritten, count, shipSelect) {
   const numString = String(num);
@@ -191,11 +193,6 @@ function undo(btnSelector) {
   });
 }
 
-function renderGame() {
-  displayController.shipSelectContainer.remove();
-  dynamicController().boardBtnContainer.remove();
-}
-
 // setsDOM for play button
 function play(btnSelector) {
   btnSelector.addEventListener('click', () => {
@@ -264,8 +261,8 @@ function createBoardBtns() {
 
 function renderShipSelection() {
   // displayController.boardContainer.classList.add('active');
-  // displayController.board.classList.add('active');
-  // displayController.shipSelectContainer.classList.add('active');
+  displayController.boardContainer.classList.remove('hidden');
+  displayController.shipSelectContainer.classList.remove('hidden');
   createBoardBtns();
   createGridBlocks(displayController.board);
   createShipSelection([0, 4, 3, 2, 1]);

@@ -7,12 +7,20 @@
     </head>
     <body>
       <div id="body_container">
+        <div id="play_button">
+          <div class="nail" id="nail_1"></div>
+          <div class="nail" id="nail_2"></div>
+          <div class="nail" id="nail_3"></div>
+          <div class="nail" id="nail_4"></div>
+          <p>PLAY</p>
+        </div>
         
-        <div id="board_container">
-          <div id="board" data-history= ""></div>
+        <div id="board_container" class="hidden">
+          <div class="player_title"><h1>Player</h1></div>
+          <div id="board" class = "board" data-history= ""></div>
           </div>
         
-        <div id="ship_select_container" data-counter = ""></div>
+        <div id="ship_select_container" class="hidden" data-counter = ""></div>
 
       </div>
 

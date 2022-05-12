@@ -1,5 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { displayController, dynamicController } from './controller';
+// eslint-disable-next-line import/no-cycle
+import { renderShipSelection } from './dragndrop_render';
+
+// playButton DOM
+function playButton() {
+  displayController.playButton.addEventListener('click', () => {
+    displayController.playButton.classList.add('hidden');
+    renderShipSelection();
+  });
+}
 
 // adds offset element so that the specific block will be recorded
 function initOffset(ships) {
@@ -64,5 +74,5 @@ function attackDOM(board, cpuBoard, player, cpu) {
 }
 
 export {
-  initOffset, flipShip, attackDOM,
+  initOffset, flipShip, attackDOM, playButton,
 };

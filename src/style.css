@@ -78,6 +78,11 @@ header{
   flex-wrap: wrap;
   align-self: center;
 }
+
+.hidden{
+  display: none;
+}
+
 .grid_block{
   margin: 0;
   border:1px solid black;

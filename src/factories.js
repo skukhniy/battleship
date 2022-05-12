@@ -75,7 +75,7 @@ const gameboard = (player, board) => {
     return bool;
   });
   return {
-    missedGrids, shipArray, shipGrids, recieveAttack, isSunk, attackedGrids, 
+    missedGrids, shipArray, shipGrids, recieveAttack, isSunk, attackedGrids,
   };
 };
 

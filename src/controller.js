@@ -1,10 +1,11 @@
 const displayController = (() => {
   const bodyContainer = document.getElementById('body_container');
+  const playButton = document.getElementById('play_button');
   const board = document.getElementById('board');
   const boardContainer = document.getElementById('board_container');
   const shipSelectContainer = document.getElementById('ship_select_container');
   return {
-    board, shipSelectContainer, boardContainer, bodyContainer,
+    board, shipSelectContainer, boardContainer, bodyContainer, playButton,
   };
 })();
 

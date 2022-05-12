@@ -1,8 +1,7 @@
 /* eslint-disable no-loop-func */
 import { displayController, dynamicController } from './controller';
 import { createGridBlocks, createShip } from './dragndrop_render';
-
-//
+import { game } from './game';
 
 // create CPU game board
 function renderCPUBoard() {
@@ -215,6 +214,15 @@ function mockShipRender() {
   }
 }
 
+// renders the game after ship selection is done
+function renderGame() {
+  displayController.shipSelectContainer.remove();
+  dynamicController().boardBtnContainer.remove();
+  renderCPUBoard();
+  randomizeShipCPU();
+  game();
+}
+
 export {
-  renderCPUBoard, randomizeShipCPU, createShipsCPU, passBorder, mockShipRender,
+  renderCPUBoard, randomizeShipCPU, createShipsCPU, passBorder, mockShipRender, renderGame,
 };
